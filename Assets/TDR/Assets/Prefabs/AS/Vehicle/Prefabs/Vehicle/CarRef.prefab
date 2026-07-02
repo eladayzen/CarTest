@@ -6796,8 +6796,11 @@ MonoBehaviour:
   enablePathFollowMode: 1
   maxLateralOffset: 3.5
   lateralInputSpeed: 8
-  centeringSpeed: 5
   inputDeadzone: 0.05
+  holdOffsetOnRelease: 1
+  centeringSpeed: 5
+  cornerBrakeStrength: 1
+  minSpeedFloor: 8
 --- !u!1 &4641496532566867320
 GameObject:
   m_ObjectHideFlags: 0

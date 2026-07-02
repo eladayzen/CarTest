@@ -15,9 +15,25 @@ namespace TS.Generics
         [Header("Lateral Nudge")]
         public float                 maxLateralOffset  = 3.5f;   // world units either side of centerline
         public float                 lateralInputSpeed = 8f;     // units/sec while actively nudging
-        public float                 centeringSpeed    = 5f;     // units/sec drifting back to 0 with no input
         [Range(0f, 0.5f)]
         public float                 inputDeadzone     = 0.05f;
+
+        [Header("Release Behaviour")]
+        // Config B (default): offset holds wherever the player left it - lane choice persists
+        // through corners until the player moves again. Config A: offset drifts back to
+        // centerline at centeringSpeed when there's no input.
+        public bool                  holdOffsetOnRelease = true;
+        public float                 centeringSpeed      = 5f;   // units/sec, only used when holdOffsetOnRelease = false
+
+        [Header("Corner Braking (Config C)")]
+        // A held offset tightens the effective turn radius on the inside of a corner beyond what
+        // CarAI's own centerline-based braking accounts for. Rather than let the offset bleed
+        // back toward centerline when the car can't physically turn sharply enough, brake harder
+        // so the exact chosen lane is always reached. 0 = no extra braking, 1 = full brake at
+        // max corner sharpness * max offset severity.
+        [Range(0f, 1f)]
+        public float                 cornerBrakeStrength = 1f;
+        public float                 minSpeedFloor        = 8f;  // never brake below this speed via this system
 
         CarState                     carState;
         CarController                carController;
@@ -25,6 +41,7 @@ namespace TS.Generics
         VehiclePathFollow            vehiclePathFollow;
         VehicleInfo                  vehicleInfo;
         CarPlayerInputs              carPlayerInputs;
+        Rigidbody                    rb;
 
         float                        currentLateralOffset = 0f;
         bool                         isReady = false;
@@ -38,6 +55,7 @@ namespace TS.Generics
             vehiclePathFollow = GetComponent<VehiclePathFollow>();
             vehicleInfo       = GetComponent<VehicleInfo>();
             carPlayerInputs   = GetComponent<CarPlayerInputs>();
+            rb                = GetComponent<Rigidbody>();
 
             StartCoroutine(InitRoutine());
             #endregion
@@ -82,14 +100,16 @@ namespace TS.Generics
             float lateralInput = carPlayerInputs.ReturnPlayerSteerRatio();
 
             // 2) Integrate our own smoothed lateral offset with independent nudge/center rates.
-            //    Centering is actively driven toward 0 every frame, not merely "stop increasing".
+            //    holdOffsetOnRelease (Config B, default): no input leaves the offset untouched -
+            //    the player's lane choice persists through corners until they move again.
+            //    !holdOffsetOnRelease (Config A): actively drifts back to 0 at centeringSpeed.
             if (Mathf.Abs(lateralInput) > inputDeadzone)
             {
                 currentLateralOffset = Mathf.Clamp(
                     currentLateralOffset + lateralInput * lateralInputSpeed * Time.fixedDeltaTime,
                     -maxLateralOffset, maxLateralOffset);
             }
-            else
+            else if (!holdOffsetOnRelease)
             {
                 currentLateralOffset = Mathf.MoveTowards(currentLateralOffset, 0f,
                     centeringSpeed * Time.fixedDeltaTime);
@@ -99,9 +119,22 @@ namespace TS.Generics
             //    (already-smoothed value, no extra smoothing layer needed).
             vehiclePathFollow.UpdateOffsetPathPosition(currentLateralOffset, 0f);
 
+            // 3b) Keep the obstacle-danger-list index fresh ourselves - CarAI.Update() normally
+            //     does this every 4 frames, but that loop is gated behind IsPlayerAI() and never
+            //     runs for this (Human-flagged) car, so without this DesiredAcceleration()'s
+            //     obstacle branch below indexes with a stale/out-of-range value on tracks that
+            //     have a PathObstacle configured.
+            if (carAI.PathObs != null)
+                carAI.closestObstaclePathPos = carAI.CloseFromPathObstaclePosition();
+
             // 4) Baseline throttle + steer reused from CarAI - pure reuse, no duplicated logic.
             float steer = carAI.DesiredSteer();
             float accel = carAI.DesiredAcceleration();
+
+            // 4b) Config C: brake harder when the held offset makes the upcoming corner tighter
+            //     than CarAI's own centerline-based braking accounts for, so the exact chosen
+            //     lane is always reached instead of bleeding back toward centerline.
+            accel = ApplyCornerBraking(accel);
 
             // 5) Single shared entry point, same as AI/Human normally use.
             carController.CarMoveParameters(steer, accel);
@@ -109,6 +142,32 @@ namespace TS.Generics
             // 6) Keep carState bookkeeping alive for downstream systems (wheel-turn animation,
             //    dashboard, etc.) since CarAI.UpdateCarState() doesn't run for a Human-flagged car.
             UpdateCarStateBookkeeping(steer, accel);
+            #endregion
+        }
+
+        // Extra brake cap layered on top of CarAI's own centerline-based result. The corner-
+        // sharpness signal reuses the same targetOne/targetTwo forward angle CarAI's own
+        // CautiousNeededDependingOnCornerAngle() uses, scaled by how far off centerline the
+        // held offset currently is - centerline (currentLateralOffset = 0) is always unaffected.
+        float ApplyCornerBraking(float accel)
+        {
+            #region
+            if (carAI.targetOne == null || carAI.targetTwo == null || maxLateralOffset <= 0f)
+                return accel;
+
+            if (rb != null && rb.linearVelocity.magnitude <= minSpeedFloor)
+                return accel;
+
+            float cornerAngle = Vector3.Angle(carAI.targetOne.forward, carAI.targetTwo.forward);
+            float cornerSharpness = Mathf.InverseLerp(0f, 180f, cornerAngle);
+            float offsetSeverity = Mathf.Abs(currentLateralOffset) / maxLateralOffset;
+
+            float extraBrakeDemand = cornerSharpness * offsetSeverity * cornerBrakeStrength;
+            if (extraBrakeDemand <= 0f)
+                return accel;
+
+            float accelCap = Mathf.Lerp(1f, -1f, extraBrakeDemand);
+            return Mathf.Min(accel, accelCap);
             #endregion
         }
 

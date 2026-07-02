@@ -25,7 +25,10 @@
       "Bash(python3 -c \"import PyPDF2\")",
       "Bash(python3 -c \"import pypdf\")",
       "Bash(pip3 install *)",
-      "Bash(python3)"
+      "Bash(python3)",
+      "mcp__ai-game-developer__console-get-logs",
+      "mcp__ai-game-developer__assets-refresh",
+      "mcp__ai-game-developer__script-execute"
     ]
   },
   "enabledMcpjsonServers": [

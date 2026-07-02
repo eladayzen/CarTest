@@ -884,7 +884,7 @@ namespace TS.Generics
 
         int lastObstaclePos = 0;
         bool checkAllPos = true;
-        int CloseFromPathObstaclePosition()
+        public int CloseFromPathObstaclePosition()
         {
             #region
             float closestDistanceSqr = Mathf.Infinity;
