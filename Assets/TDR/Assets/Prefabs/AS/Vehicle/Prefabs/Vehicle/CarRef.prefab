@@ -6799,7 +6799,7 @@ MonoBehaviour:
   inputDeadzone: 0.05
   holdOffsetOnRelease: 1
   centeringSpeed: 5
-  cornerBrakeStrength: 1
+  cornerBrakeStrength: 0
   minSpeedFloor: 8
 --- !u!1 &4641496532566867320
 GameObject:

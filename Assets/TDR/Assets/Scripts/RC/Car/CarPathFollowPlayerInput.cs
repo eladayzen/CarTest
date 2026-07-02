@@ -25,6 +25,14 @@ namespace TS.Generics
         public bool                  holdOffsetOnRelease = true;
         public float                 centeringSpeed      = 5f;   // units/sec, only used when holdOffsetOnRelease = false
 
+        [Header("Turn-Rate Boost")]
+        // Raises the car's actual physical turn-rate ceiling (CarController.speedRotationRef) so
+        // there's more real steering headroom to express lateral nudges against the path's own
+        // curvature during hard corners, instead of the two competing for the same limited
+        // budget. Applied once at init, only to this vehicle's own CarController instance -
+        // never touches the shared prefab default or AI-driven cars. 1 = no change.
+        public float                 turnRateMultiplier = 1.3f;
+
         [Header("Corner Braking (Config C)")]
         // A held offset tightens the effective turn radius on the inside of a corner beyond what
         // CarAI's own centerline-based braking accounts for. Rather than let the offset bleed
@@ -32,7 +40,7 @@ namespace TS.Generics
         // so the exact chosen lane is always reached. 0 = no extra braking, 1 = full brake at
         // max corner sharpness * max offset severity.
         [Range(0f, 1f)]
-        public float                 cornerBrakeStrength = 1f;
+        public float                 cornerBrakeStrength = 0f;
         public float                 minSpeedFloor        = 8f;  // never brake below this speed via this system
 
         CarState                     carState;
@@ -78,6 +86,12 @@ namespace TS.Generics
             bool active = enablePathFollowMode && isHumanSlot;
             carState.isPathFollowAssistEnabled = active;
             isReady = active;
+
+            // Only ever touch this vehicle's own CarController instance - CarController.Init()
+            // has already run (waited on isInitDone above), so speedRotationRef is set and safe
+            // to scale here without being overwritten later.
+            if (active)
+                carController.speedRotationRef *= turnRateMultiplier;
             #endregion
         }
 

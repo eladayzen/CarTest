@@ -22,7 +22,7 @@ namespace TS.Generics
         public Transform                centerOfMass;
 
         public float                    speedRotation = 30;
-        private float                   speedRotationRef = 0;
+        public float                    speedRotationRef = 0;
         public AnimationCurve           rotationSpeedCurve;
 
         public float                    jumpDownForceApplied = 3500;

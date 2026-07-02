@@ -28,7 +28,12 @@
       "Bash(python3)",
       "mcp__ai-game-developer__console-get-logs",
       "mcp__ai-game-developer__assets-refresh",
-      "mcp__ai-game-developer__script-execute"
+      "mcp__ai-game-developer__script-execute",
+      "mcp__ai-game-developer__assets-prefab-open",
+      "mcp__ai-game-developer__gameobject-find",
+      "mcp__ai-game-developer__gameobject-component-modify",
+      "mcp__ai-game-developer__assets-prefab-save",
+      "mcp__ai-game-developer__assets-prefab-close"
     ]
   },
   "enabledMcpjsonServers": [
