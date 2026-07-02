@@ -31,7 +31,13 @@ namespace TS.Generics
         // curvature during hard corners, instead of the two competing for the same limited
         // budget. Applied once at init, only to this vehicle's own CarController instance -
         // never touches the shared prefab default or AI-driven cars. 1 = no change.
-        public float                 turnRateMultiplier = 1.3f;
+        public float                 turnRateMultiplier = 1.6f;
+
+        [Header("Max Speed")]
+        // Lowers the assisted car's top speed so it has more time/turn-rate budget to work with
+        // on hard corners, at the cost of overall pace everywhere (not just corners). Applied
+        // once at init, only to this vehicle's own CarController instance. 1 = no change.
+        public float                 maxSpeedMultiplier = 0.85f;
 
         [Header("Corner Braking (Config C)")]
         // A held offset tightens the effective turn radius on the inside of a corner beyond what
@@ -41,7 +47,16 @@ namespace TS.Generics
         // max corner sharpness * max offset severity.
         [Range(0f, 1f)]
         public float                 cornerBrakeStrength = 0f;
-        public float                 minSpeedFloor        = 8f;  // never brake below this speed via this system
+        public float                 minSpeedFloor        = 6f;  // never brake below this speed via this system
+
+        [Header("General Corner Slowdown")]
+        // Extra braking scaled purely by upcoming corner sharpness, independent of any held
+        // offset - unlike Config C (which only kicks in while holding a lane offset), this gives
+        // turn-rate breathing room on any hard corner even when centered or barely nudging, so
+        // input doesn't feel like it's fighting the path's own curvature. 0 = no extra braking,
+        // 1 = full brake at the sharpest corner.
+        [Range(0f, 1f)]
+        public float                 generalCornerBrakeStrength = 0.4f;
 
         CarState                     carState;
         CarController                carController;
@@ -88,10 +103,15 @@ namespace TS.Generics
             isReady = active;
 
             // Only ever touch this vehicle's own CarController instance - CarController.Init()
-            // has already run (waited on isInitDone above), so speedRotationRef is set and safe
-            // to scale here without being overwritten later.
+            // has already run (waited on isInitDone above), so speedRotationRef/maxSpeed are set
+            // and safe to scale here without being overwritten later.
             if (active)
+            {
                 carController.speedRotationRef *= turnRateMultiplier;
+
+                carController.maxSpeed *= maxSpeedMultiplier;
+                carController.refMaxSpeed = carController.maxSpeed;
+            }
             #endregion
         }
 
@@ -161,12 +181,16 @@ namespace TS.Generics
 
         // Extra brake cap layered on top of CarAI's own centerline-based result. The corner-
         // sharpness signal reuses the same targetOne/targetTwo forward angle CarAI's own
-        // CautiousNeededDependingOnCornerAngle() uses, scaled by how far off centerline the
-        // held offset currently is - centerline (currentLateralOffset = 0) is always unaffected.
+        // CautiousNeededDependingOnCornerAngle() uses. Two independent demand sources are
+        // combined by taking the larger one (not stacked/added):
+        //  - offsetBrakeDemand (Config C): scales with held offset severity, so an off-center
+        //    lane is always physically reachable. Zero at centerline.
+        //  - generalBrakeDemand: scales with corner sharpness alone, so hard corners get some
+        //    breathing room even when centered or barely nudging.
         float ApplyCornerBraking(float accel)
         {
             #region
-            if (carAI.targetOne == null || carAI.targetTwo == null || maxLateralOffset <= 0f)
+            if (carAI.targetOne == null || carAI.targetTwo == null)
                 return accel;
 
             if (rb != null && rb.linearVelocity.magnitude <= minSpeedFloor)
@@ -174,9 +198,12 @@ namespace TS.Generics
 
             float cornerAngle = Vector3.Angle(carAI.targetOne.forward, carAI.targetTwo.forward);
             float cornerSharpness = Mathf.InverseLerp(0f, 180f, cornerAngle);
-            float offsetSeverity = Mathf.Abs(currentLateralOffset) / maxLateralOffset;
 
-            float extraBrakeDemand = cornerSharpness * offsetSeverity * cornerBrakeStrength;
+            float offsetSeverity = maxLateralOffset > 0f ? Mathf.Abs(currentLateralOffset) / maxLateralOffset : 0f;
+            float offsetBrakeDemand = cornerSharpness * offsetSeverity * cornerBrakeStrength;
+            float generalBrakeDemand = cornerSharpness * generalCornerBrakeStrength;
+
+            float extraBrakeDemand = Mathf.Max(offsetBrakeDemand, generalBrakeDemand);
             if (extraBrakeDemand <= 0f)
                 return accel;
 

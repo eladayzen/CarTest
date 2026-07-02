@@ -3754,6 +3754,7 @@ MonoBehaviour:
   rb: {fileID: 4641496532475807989}
   centerOfMass: {fileID: 4641496532468285088}
   speedRotation: 25
+  speedRotationRef: 0
   rotationSpeedCurve:
     serializedVersion: 2
     m_Curve:
@@ -6794,13 +6795,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enablePathFollowMode: 1
-  maxLateralOffset: 3.5
-  lateralInputSpeed: 8
+  maxLateralOffset: 4
+  lateralInputSpeed: 6
   inputDeadzone: 0.05
   holdOffsetOnRelease: 1
-  centeringSpeed: 5
-  cornerBrakeStrength: 0
-  minSpeedFloor: 8
+  centeringSpeed: 3
+  turnRateMultiplier: 1.6
+  maxSpeedMultiplier: 0.6
+  cornerBrakeStrength: 0.07
+  minSpeedFloor: 6
+  generalCornerBrakeStrength: 0.716
 --- !u!1 &4641496532566867320
 GameObject:
   m_ObjectHideFlags: 0
