@@ -33,7 +33,8 @@
       "mcp__ai-game-developer__gameobject-find",
       "mcp__ai-game-developer__gameobject-component-modify",
       "mcp__ai-game-developer__assets-prefab-save",
-      "mcp__ai-game-developer__assets-prefab-close"
+      "mcp__ai-game-developer__assets-prefab-close",
+      "mcp__ai-game-developer__scene-list-opened"
     ]
   },
   "enabledMcpjsonServers": [
