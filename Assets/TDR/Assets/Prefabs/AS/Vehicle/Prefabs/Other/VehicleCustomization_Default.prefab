@@ -1,0 +1,570 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &675156248103905883
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6769981149481650090}
+  - component: {fileID: 5435105865693986872}
+  m_Layer: 0
+  m_Name: VehicleCustomization_Default
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6769981149481650090
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 675156248103905883}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 766292288631494443}
+  - {fileID: 4452217138642353058}
+  - {fileID: 2199918903623342454}
+  - {fileID: 3513889488121262001}
+  - {fileID: 2437821182773648458}
+  - {fileID: 4847952535285902373}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5435105865693986872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 675156248103905883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef5332b33a1edee4eab1816ccfbd23e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  b_InitDone: 0
+  AutoInit: 1
+  VehicleID: 1
+  CustomSectionList:
+  - Name: Speed
+    TextList: 0
+    TextID: 55
+    ObjSection: {fileID: 766292288631494443}
+    orbitalState: 0
+    newCamPosition: {x: 0, y: 0, z: 0}
+  - Name: Acceleration
+    TextList: 0
+    TextID: 200
+    ObjSection: {fileID: 4452217138642353058}
+    orbitalState: 0
+    newCamPosition: {x: 0, y: 0, z: 0}
+  - Name: Brake Force
+    TextList: 0
+    TextID: 60
+    ObjSection: {fileID: 2199918903623342454}
+    orbitalState: 0
+    newCamPosition: {x: 0, y: 0, z: 0}
+  - Name: Livery
+    TextList: 0
+    TextID: 227
+    ObjSection: {fileID: 3513889488121262001}
+    orbitalState: 0
+    newCamPosition: {x: 40, y: -2.5, z: 13}
+  - Name: Wheels
+    TextList: 0
+    TextID: 226
+    ObjSection: {fileID: 2437821182773648458}
+    orbitalState: 0
+    newCamPosition: {x: -30, y: -10, z: 13}
+  - Name: _
+    TextList: 0
+    TextID: 0
+    ObjSection: {fileID: 4847952535285902373}
+    orbitalState: 0
+    newCamPosition: {x: 57, y: 57, z: 12}
+--- !u!1 &898353134979614849
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4452217138642353058}
+  - component: {fileID: 3330210501786560832}
+  - component: {fileID: 1942360338508777585}
+  m_Layer: 0
+  m_Name: Acceleration
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4452217138642353058
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 898353134979614849}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6769981149481650090}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3330210501786560832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 898353134979614849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46704944ac205244aa40f074dccfca96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1942360338508777585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 898353134979614849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2acd0278dd5a2a6439feec87df8312d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentSelection: 0
+  ValueList:
+  - percentage: 2
+    Price: 100
+  - percentage: 2
+    Price: 200
+  - percentage: 2
+    Price: 300
+  - percentage: 2
+    Price: 400
+  - percentage: 2
+    Price: 500
+  ActionInitCustomPerformance:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1942360338508777585}
+        m_TargetAssemblyTypeName: TS.Generics.VehicleCustomValue, Assembly-CSharp
+        m_MethodName: UpdateCarControllerAcceleration
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  Txt: Acceleration
+--- !u!1 &1254340677333627161
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4847952535285902373}
+  - component: {fileID: 7127356830808617847}
+  - component: {fileID: 6572968463725872697}
+  m_Layer: 0
+  m_Name: _
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4847952535285902373
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254340677333627161}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6769981149481650090}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7127356830808617847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254340677333627161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46704944ac205244aa40f074dccfca96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6572968463725872697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254340677333627161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec6bb3c5f96b4748bc278a46bc0d6a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentSelection: 0
+  ColorList: []
+  ObjList:
+  - obj: {fileID: 0}
+    matID: 0
+  ActionCustomizationProcess:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6572968463725872697}
+        m_TargetAssemblyTypeName: TS.Generics.VehicleCustomColor, Assembly-CSharp
+        m_MethodName: ChangeTheMaterialColorAccessURPMainColor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  aiCustomType: 2
+  aiCustomList: 00000000000000000100000002000000
+--- !u!1 &1692287484198984753
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2437821182773648458}
+  - component: {fileID: 1248746519577227458}
+  - component: {fileID: 6214393324579043310}
+  m_Layer: 0
+  m_Name: Wheels
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2437821182773648458
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692287484198984753}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6769981149481650090}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1248746519577227458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692287484198984753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46704944ac205244aa40f074dccfca96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6214393324579043310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692287484198984753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23768abef0c37d64e8d69d735ce06b27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentSelection: 0
+  prefabScale: {x: 1, y: 1, z: 1}
+  ModelsList: []
+  PivotsList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  aiCustomType: 0
+  aiCustomList: 
+--- !u!1 &2096939725944905785
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2199918903623342454}
+  - component: {fileID: 8846554929787826185}
+  - component: {fileID: 4274551109056106156}
+  m_Layer: 0
+  m_Name: BrakeForce
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2199918903623342454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096939725944905785}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6769981149481650090}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8846554929787826185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096939725944905785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46704944ac205244aa40f074dccfca96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4274551109056106156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096939725944905785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2acd0278dd5a2a6439feec87df8312d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentSelection: 0
+  ValueList:
+  - percentage: 2
+    Price: 100
+  - percentage: 2
+    Price: 200
+  - percentage: 2
+    Price: 300
+  - percentage: 2
+    Price: 400
+  - percentage: 2
+    Price: 500
+  ActionInitCustomPerformance:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4274551109056106156}
+        m_TargetAssemblyTypeName: TS.Generics.VehicleCustomValue, Assembly-CSharp
+        m_MethodName: UpdateCarControllerBrakeForce
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  Txt: Bake Force
+--- !u!1 &7005775029552572802
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3513889488121262001}
+  - component: {fileID: 5807886708846289906}
+  - component: {fileID: 4908374144588789250}
+  m_Layer: 0
+  m_Name: Livery
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3513889488121262001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7005775029552572802}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6769981149481650090}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5807886708846289906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7005775029552572802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46704944ac205244aa40f074dccfca96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4908374144588789250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7005775029552572802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b22af71624b0db4294a652918a570ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentSelection: 0
+  liveryList: []
+  ObjList: []
+  ActionCustomizationProcess:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4908374144588789250}
+        m_TargetAssemblyTypeName: TS.Generics.VehicleCustomLivery, Assembly-CSharp
+        m_MethodName: ChangeCarPaintingMaskAndLivery
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  aiCustomType: 2
+  aiCustomList: 
+--- !u!1 &8335288618435680735
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 766292288631494443}
+  - component: {fileID: 5102087475861842677}
+  - component: {fileID: 7473940168982685812}
+  m_Layer: 0
+  m_Name: Speed
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &766292288631494443
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8335288618435680735}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6769981149481650090}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5102087475861842677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8335288618435680735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46704944ac205244aa40f074dccfca96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7473940168982685812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8335288618435680735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2acd0278dd5a2a6439feec87df8312d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentSelection: 0
+  ValueList:
+  - percentage: 0.6
+    Price: 100
+  - percentage: 0.32
+    Price: 200
+  - percentage: 2
+    Price: 300
+  - percentage: 2
+    Price: 400
+  - percentage: 2
+    Price: 500
+  ActionInitCustomPerformance:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7473940168982685812}
+        m_TargetAssemblyTypeName: TS.Generics.VehicleCustomValue, Assembly-CSharp
+        m_MethodName: UpdateCarControllerMaxSpeed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  Txt: Speed

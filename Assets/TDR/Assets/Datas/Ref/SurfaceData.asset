@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 736273d3d3dae47409d2c116ed621395, type: 3}
+  m_Name: SurfaceData
+  m_EditorClassIdentifier: 
+  surfaceList:
+  - roadType: 0
+    speedAmount: 1
+    gripAmount: 1
+    aSurface: {fileID: 8300000, guid: 44e6910ae08432a44b4cf82ed052b4f9, type: 3}
+    aSkidmark: {fileID: 8300000, guid: 79667178633b25c479b5e377fc36d840, type: 3}
+    skidmarkPitch: 0.25
+    aBrake: {fileID: 8300000, guid: 2ebc43aeb43f9ee4b84f9ca466f90c0e, type: 3}
+  - roadType: 1
+    speedAmount: 1
+    gripAmount: 0.9
+    aSurface: {fileID: 8300000, guid: 44e6910ae08432a44b4cf82ed052b4f9, type: 3}
+    aSkidmark: {fileID: 8300000, guid: c1f7248dc80cb4a348d7c1b3aafe141b, type: 3}
+    skidmarkPitch: 0.25
+    aBrake: {fileID: 8300000, guid: 6d7b9ae56cf8db34bb11b07b1da7cd82, type: 3}
+  - roadType: 2
+    speedAmount: 1
+    gripAmount: 0.6
+    aSurface: {fileID: 8300000, guid: 94004b02f9a7fbd48b997ab8051e97aa, type: 3}
+    aSkidmark: {fileID: 8300000, guid: 79667178633b25c479b5e377fc36d840, type: 3}
+    skidmarkPitch: 0.25
+    aBrake: {fileID: 8300000, guid: 2ebc43aeb43f9ee4b84f9ca466f90c0e, type: 3}
+  - roadType: 3
+    speedAmount: 1
+    gripAmount: 0.4
+    aSurface: {fileID: 8300000, guid: 94004b02f9a7fbd48b997ab8051e97aa, type: 3}
+    aSkidmark: {fileID: 8300000, guid: 79667178633b25c479b5e377fc36d840, type: 3}
+    skidmarkPitch: 0.25
+    aBrake: {fileID: 8300000, guid: 2ebc43aeb43f9ee4b84f9ca466f90c0e, type: 3}
+  - roadType: 4
+    speedAmount: 1
+    gripAmount: 0.3
+    aSurface: {fileID: 8300000, guid: 62ca46b9896535c488e499d72c48acee, type: 3}
+    aSkidmark: {fileID: 8300000, guid: 79667178633b25c479b5e377fc36d840, type: 3}
+    skidmarkPitch: 0.25
+    aBrake: {fileID: 8300000, guid: 2ebc43aeb43f9ee4b84f9ca466f90c0e, type: 3}
+  - roadType: 5
+    speedAmount: 0.6
+    gripAmount: 0.8
+    aSurface: {fileID: 8300000, guid: d6ef6f462dba4e84980407a1cf849d89, type: 3}
+    aSkidmark: {fileID: 8300000, guid: 79667178633b25c479b5e377fc36d840, type: 3}
+    skidmarkPitch: 0.25
+    aBrake: {fileID: 8300000, guid: 2ebc43aeb43f9ee4b84f9ca466f90c0e, type: 3}
+  - roadType: 6
+    speedAmount: 0.9
+    gripAmount: 0.35
+    aSurface: {fileID: 8300000, guid: 9945d6c5f385e9d488ea5c9eefe4cbc5, type: 3}
+    aSkidmark: {fileID: 8300000, guid: 79667178633b25c479b5e377fc36d840, type: 3}
+    skidmarkPitch: 0.25
+    aBrake: {fileID: 8300000, guid: 2ebc43aeb43f9ee4b84f9ca466f90c0e, type: 3}
+  - roadType: 7
+    speedAmount: 0.8
+    gripAmount: 0.8
+    aSurface: {fileID: 8300000, guid: 3e9ff0725883a6249920356d7b16df1e, type: 3}
+    aSkidmark: {fileID: 8300000, guid: 79667178633b25c479b5e377fc36d840, type: 3}
+    skidmarkPitch: 0.25
+    aBrake: {fileID: 8300000, guid: 2ebc43aeb43f9ee4b84f9ca466f90c0e, type: 3}
+  - roadType: 8
+    speedAmount: 0.8
+    gripAmount: 1
+    aSurface: {fileID: 8300000, guid: d44c2666ef954a74983ede335b2eb448, type: 3}
+    aSkidmark: {fileID: 8300000, guid: 79667178633b25c479b5e377fc36d840, type: 3}
+    skidmarkPitch: 0.25
+    aBrake: {fileID: 8300000, guid: 2ebc43aeb43f9ee4b84f9ca466f90c0e, type: 3}
+  - roadType: 9
+    speedAmount: 0.8
+    gripAmount: 1
+    aSurface: {fileID: 8300000, guid: 4c0014e8f704b824297f5fa4678178d1, type: 3}
+    aSkidmark: {fileID: 8300000, guid: 79667178633b25c479b5e377fc36d840, type: 3}
+    skidmarkPitch: 0.25
+    aBrake: {fileID: 8300000, guid: 2ebc43aeb43f9ee4b84f9ca466f90c0e, type: 3}
+  terrainLayerList:
+  - layer: {fileID: 8574412962073106934, guid: 3a808acb863119c45a18148da5a56f7a, type: 2}
+    roadType: 5
+  - layer: {fileID: 8574412962073106934, guid: 6a64eff8570822544aeb118d53dfee27, type: 2}
+    roadType: 7
+  - layer: {fileID: 8574412962073106934, guid: d89cf91b8b0b9a04f858bec6d210376c, type: 2}
+    roadType: 9
+  - layer: {fileID: 8574412962073106934, guid: ea5824f48100c5c429c09a44a2a27a67, type: 2}
+    roadType: 6
+  - layer: {fileID: 8574412962073106934, guid: 71b760ea729b0944c87c6115e10d88f1, type: 2}
+    roadType: 8
+  - layer: {fileID: 8574412962073106934, guid: 4ad57d0cdf352f345b3e1341fcdeb971, type: 2}
+    roadType: 1
+  - layer: {fileID: 8574412962073106934, guid: 0ca7f6333123eb7479ea59a668085ac7, type: 2}
+    roadType: 6

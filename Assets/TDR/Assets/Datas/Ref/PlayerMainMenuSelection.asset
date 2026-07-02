@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3fb5507a198f4eda9ada1acd93cafdc, type: 3}
+  m_Name: PlayerMainMenuSelection
+  m_EditorClassIdentifier: 
+  helpBox: 0
+  HowManyPlayer: 1
+  currentGameMode: 0
+  howManyVehicleInSelectedGameMode: 12
+  currentDifficulty: 0
+  vehicleMode3: 0
+  currentCamStyle: 0
+  camNameList:
+  - Cam 3D -> Follow Vehicle | Behind Vehicle
+  - Cam 3D -> Follow Vehicle | Look At Constant Direction
+  - Cam 3D -> Follow A Path | Look At The Vehicle
+  - Cam 2D -> Follow Vehicle | Look At Constant Direction
+  - Cam 2D -> Follow Vehicle | Behind Vehicle
+  - Cam 3D -> Ortho | Follow Vehicle | Look At Constant Direction

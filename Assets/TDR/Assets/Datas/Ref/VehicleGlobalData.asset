@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 264a1bf44d0304426af8a43ae76bb548, type: 3}
+  m_Name: VehicleGlobalData
+  m_EditorClassIdentifier: 
+  MoreOptions: 0
+  HelpBox: 1
+  tab: 0
+  carParametersList:
+  - name: 
+    bShow: 1
+    Prefab: {fileID: 4324880744717468904, guid: d34cf2eccf574474e8c62ae31d24f0ed, type: 3}
+    img: {fileID: 21300000, guid: 13533e22beb3d42458dd7a7df4ec07a1, type: 3}
+    vehicleCategory: 0
+    speed: 90
+    damageResistance: 10
+    boosterPower: 70
+    boosterDuration: 2
+    boosterCooldown: 4
+    coinMultiplier: 1
+    cost: 0
+    isUnlocked: 1
+    speedAI: 50
+    damageResistanceAI: 10
+    boosterPowerAI: 60
+    boosterDurationAI: 2
+    boosterCooldownAI: 0.1
+    prefabScaleMultiplierInMenu: 0
+    offsetselectionCamP1RotationZInMenu: 0
+    bShowInEditor: 1
+  - name: 
+    bShow: 1
+    Prefab: {fileID: 2384380653961088815, guid: 5ed4324beb3eccd4e8adca1295444489, type: 3}
+    img: {fileID: 21300000, guid: 8dba908f360fdfd429ddc6d65d5983bb, type: 3}
+    vehicleCategory: 1
+    speed: 50
+    damageResistance: 11
+    boosterPower: 69
+    boosterDuration: 2.1
+    boosterCooldown: 3.8
+    coinMultiplier: 1
+    cost: 10000
+    isUnlocked: 1
+    speedAI: 50
+    damageResistanceAI: 10
+    boosterPowerAI: 60
+    boosterDurationAI: 2
+    boosterCooldownAI: 0.1
+    prefabScaleMultiplierInMenu: 0
+    offsetselectionCamP1RotationZInMenu: 0
+    bShowInEditor: 1
+  currentVehicleDisplayedInTheGarage: 1
+  OrderUsingCustomList: 0
+  customList: 020000000000000001000000
+  VehicleCategoryParamsList:
+  - Name: 
+    ListID: 0
+    EntryID: 189
+    sprite: {fileID: 21300000, guid: 2760db4e97daac64b8a2803d4916818a, type: 3}
+  - Name: 
+    ListID: 0
+    EntryID: 190
+    sprite: {fileID: 21300000, guid: 1a4399bc713cded4faa44c05bb373f9c, type: 3}
+  playerNamesList:
+  - paramName: 
+    listID: 0
+    EntryID: 139
+  - paramName: 
+    listID: 0
+    EntryID: 140
+  aiNamesList:
+  - paramName: 
+    listID: 0
+    EntryID: 141
+  - paramName: 
+    listID: 0
+    EntryID: 142
+  - paramName: 
+    listID: 0
+    EntryID: 143
+  - paramName: 
+    listID: 0
+    EntryID: 144
+  - paramName: 
+    listID: 0
+    EntryID: 145
+  - paramName: 
+    listID: 0
+    EntryID: 146
+  - paramName: 
+    listID: 0
+    EntryID: 147
+  - paramName: 
+    listID: 0
+    EntryID: 148
+  - paramName: 
+    listID: 0
+    EntryID: 207
+  - paramName: 
+    listID: 0
+    EntryID: 208
+  - paramName: 
+    listID: 0
+    EntryID: 209
+  - paramName: 
+    listID: 0
+    EntryID: 210
+  - paramName: 
+    listID: 0
+    EntryID: 211
+  - paramName: 
+    listID: 0
+    EntryID: 212
+  - paramName: 
+    listID: 0
+    EntryID: 213
+  - paramName: 
+    listID: 0
+    EntryID: 214
+  aiNameRandom: 1
+  gameModeThatWaitVehicleRefInitList: 00000000010000000200000003000000

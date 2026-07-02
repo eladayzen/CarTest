@@ -1,0 +1,197 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3003308337070975231
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2941579434393338316}
+  - component: {fileID: 6295833507114926963}
+  m_Layer: 0
+  m_Name: LOD_Oil_Tank_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2941579434393338316
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3003308337070975231}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8207461262671440368}
+  - {fileID: 3343886449170828707}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!205 &6295833507114926963
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3003308337070975231}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 0.9813745
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.06221633
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 7038543837753545375}
+  - screenRelativeHeight: 0.015286621
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 4480223868028335820}
+  m_Enabled: 1
+--- !u!1001 &5414988697811023554
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2941579434393338316}
+    m_Modifications:
+    - target: {fileID: 3569372789216953736, guid: 93847f6530a62514db4184934af0c2e7, type: 3}
+      propertyPath: m_Name
+      value: Oil_Tank_01_Lod0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4234268822867582770, guid: 93847f6530a62514db4184934af0c2e7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4234268822867582770, guid: 93847f6530a62514db4184934af0c2e7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4234268822867582770, guid: 93847f6530a62514db4184934af0c2e7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4234268822867582770, guid: 93847f6530a62514db4184934af0c2e7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4234268822867582770, guid: 93847f6530a62514db4184934af0c2e7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4234268822867582770, guid: 93847f6530a62514db4184934af0c2e7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4234268822867582770, guid: 93847f6530a62514db4184934af0c2e7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4234268822867582770, guid: 93847f6530a62514db4184934af0c2e7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4234268822867582770, guid: 93847f6530a62514db4184934af0c2e7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4234268822867582770, guid: 93847f6530a62514db4184934af0c2e7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 93847f6530a62514db4184934af0c2e7, type: 3}
+--- !u!23 &7038543837753545375 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3064710351533073501, guid: 93847f6530a62514db4184934af0c2e7, type: 3}
+  m_PrefabInstance: {fileID: 5414988697811023554}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8207461262671440368 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4234268822867582770, guid: 93847f6530a62514db4184934af0c2e7, type: 3}
+  m_PrefabInstance: {fileID: 5414988697811023554}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8878879551161255272
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2941579434393338316}
+    m_Modifications:
+    - target: {fileID: 4977865404828119972, guid: 0c2a96bc8a7cd0e4c8abe4c9129df85b, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151849928812628171, guid: 0c2a96bc8a7cd0e4c8abe4c9129df85b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151849928812628171, guid: 0c2a96bc8a7cd0e4c8abe4c9129df85b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151849928812628171, guid: 0c2a96bc8a7cd0e4c8abe4c9129df85b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151849928812628171, guid: 0c2a96bc8a7cd0e4c8abe4c9129df85b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151849928812628171, guid: 0c2a96bc8a7cd0e4c8abe4c9129df85b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151849928812628171, guid: 0c2a96bc8a7cd0e4c8abe4c9129df85b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151849928812628171, guid: 0c2a96bc8a7cd0e4c8abe4c9129df85b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151849928812628171, guid: 0c2a96bc8a7cd0e4c8abe4c9129df85b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151849928812628171, guid: 0c2a96bc8a7cd0e4c8abe4c9129df85b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151849928812628171, guid: 0c2a96bc8a7cd0e4c8abe4c9129df85b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779063431171658353, guid: 0c2a96bc8a7cd0e4c8abe4c9129df85b, type: 3}
+      propertyPath: m_Name
+      value: Oil_Tank_01_Lod1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0c2a96bc8a7cd0e4c8abe4c9129df85b, type: 3}
+--- !u!4 &3343886449170828707 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6151849928812628171, guid: 0c2a96bc8a7cd0e4c8abe4c9129df85b, type: 3}
+  m_PrefabInstance: {fileID: 8878879551161255272}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &4480223868028335820 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4977865404828119972, guid: 0c2a96bc8a7cd0e4c8abe4c9129df85b, type: 3}
+  m_PrefabInstance: {fileID: 8878879551161255272}
+  m_PrefabAsset: {fileID: 0}

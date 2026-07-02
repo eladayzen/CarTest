@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82e630ba813382b4e86ef43b895441ed, type: 3}
+  m_Name: RData_ArcadeTDR
+  m_EditorClassIdentifier: 
+  MoreOptions: 0
+  HelpBox: 0
+  currentelectedDatas: 0
+  crossRoadprefab: {fileID: 4526249726691058565, guid: 81cc1175338085e4998c637ad161d08e, type: 3}
+  iD: 786
+  groundOffset: 0.03
+  isGizmosDisplayed: 1
+  currentPrefabSelected: 7
+  isRoadPrefabShown: 1
+  roadPrefabList:
+  - {fileID: 8920263760255539389, guid: bc36616dccc648d40b1f989480fe9354, type: 3}
+  - {fileID: 1364930529341576971, guid: 322152e7da02b0c449cb784504142639, type: 3}
+  - {fileID: 9076678510363528883, guid: 1df479a95e783774f8e165a404401cd1, type: 3}
+  - {fileID: 2196625317877444246, guid: cb4135a2ee0e9a846b81bde23e20ad6d, type: 3}
+  - {fileID: 8580344929524016434, guid: e6288e65514d99140a1d0d8edae4c1b4, type: 3}
+  - {fileID: 2963768455932959223, guid: eb3b9780073ec104e91bdeb74673ddef, type: 3}
+  - {fileID: 7951985463244177461, guid: 85a2d51b6e69a074798abac7ba123be0, type: 3}
+  - {fileID: 1943273172033414309, guid: ce96e1f8a9d053849b8d00247e0f0db6, type: 3}
+  crossRoadGroundPrefabList:
+  - {fileID: 2607068812120996311, guid: f018f6c467cd3ec4392777aadb6014a5, type: 3}
+  - {fileID: 1543517719722306922, guid: 0ae30822b24b25349a819eb00a839eed, type: 3}
+  pointsList: []
+  curvePosRef: {x: 0, y: 0, z: 0}
+  howManyPointToCopy: 0
+  currentProcedualGD: 0

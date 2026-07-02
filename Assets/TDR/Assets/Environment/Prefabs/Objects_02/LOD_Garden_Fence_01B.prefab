@@ -1,0 +1,197 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7087433485992920986
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6120256550836524907}
+  - component: {fileID: 212384482162932758}
+  m_Layer: 0
+  m_Name: LOD_Garden_Fence_01B
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6120256550836524907
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7087433485992920986}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5827200729488072857}
+  - {fileID: 6020901245053308546}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!205 &212384482162932758
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7087433485992920986}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0.0000011920929, y: 0.00000011920929, z: 0}
+  m_Size: 3.0898705
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.055287827
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 4653710366991670262}
+  - screenRelativeHeight: 0.0244866
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 4883490880281114093}
+  m_Enabled: 1
+--- !u!1001 &7623980107589701120
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6120256550836524907}
+    m_Modifications:
+    - target: {fileID: 3627756288592557091, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_Name
+      value: Garden_Fence_01B_Lod0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+--- !u!23 &4653710366991670262 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2979304255846880758, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+  m_PrefabInstance: {fileID: 7623980107589701120}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5827200729488072857 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+  m_PrefabInstance: {fileID: 7623980107589701120}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7682358642050588699
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6120256550836524907}
+    m_Modifications:
+    - target: {fileID: 2979304255846880758, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3627756288592557091, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_Name
+      value: Garden_Fence_01B_Lod0 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+--- !u!23 &4883490880281114093 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2979304255846880758, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+  m_PrefabInstance: {fileID: 7682358642050588699}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6020901245053308546 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4112826267807510169, guid: 7c4eb6a366cbebf46a694db0f2319e13, type: 3}
+  m_PrefabInstance: {fileID: 7682358642050588699}
+  m_PrefabAsset: {fileID: 0}

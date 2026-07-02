@@ -1,0 +1,36 @@
+[v1.001]
+
+Hi,
+First thank you for choosing the asset :).
+
+-----
+
+CAUTION: Don’t forget to install URP package.
+
+If the prefabs are pink when you open the demo scene, this means that URP Package is not installed or configured correctly.
+
+
+If you have the following error message: the type or namespace name universal does not exist...
+This means that URP Package is not installed.
+
+If you do not have URP installed, other error messages may appear in the console. Install URP to make console errors disappear.
+
+-----
+
+IMPORTANT:
+If you experience input issues the first time you launch the game, close and restart Unity.
+
+-----
+
+To easily start using the asset open the documentation included with the asset.
+Documentation -> 01_TDR_Documentation.pdf.
+Read the sections: 
+- Asset Import Process. 
+- Settings Needed To Use The Project
+
+
+This PDF also includes tutorials to help you create your first track and add your own vehicles.
+
+----
+If you cannot find an answer to a technical problem in the documentation you can send me a message at:
+targetsoundfx@gmail.com

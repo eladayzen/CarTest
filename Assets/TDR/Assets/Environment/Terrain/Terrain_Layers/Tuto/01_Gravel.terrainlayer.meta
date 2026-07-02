@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e6d731cfe1b286544aeb7eeff693afe1
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 281329
+  packageName: Quick And Easy Car Racing
+  packageVersion: 1.0.2
+  assetPath: Assets/RC/Assets/Environment/Terrain/Terrain_Layers/01_Gravel.terrainlayer
+  uploadId: 672778

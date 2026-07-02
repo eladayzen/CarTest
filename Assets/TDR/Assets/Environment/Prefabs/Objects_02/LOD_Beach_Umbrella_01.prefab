@@ -1,0 +1,197 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3086980048029679418
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5098564402604301538}
+  - component: {fileID: 168174663709112744}
+  m_Layer: 0
+  m_Name: LOD_Beach_Umbrella_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5098564402604301538
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3086980048029679418}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8542652668627064820}
+  - {fileID: 5522613843011946763}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!205 &168174663709112744
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3086980048029679418}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 2.702796
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.023892198
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 7405806249973968027}
+  - screenRelativeHeight: 0.0076132184
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 6696686461074158180}
+  m_Enabled: 1
+--- !u!1001 &1322706961252365921
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5098564402604301538}
+    m_Modifications:
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8042719761913445167, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_Name
+      value: Beach_Umbrella_01_Lod0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+--- !u!23 &7405806249973968027 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8403021406969977594, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+  m_PrefabInstance: {fileID: 1322706961252365921}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8542652668627064820 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+  m_PrefabInstance: {fileID: 1322706961252365921}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2914655421313378462
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5098564402604301538}
+    m_Modifications:
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8042719761913445167, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_Name
+      value: Beach_Umbrella_01_Lod0 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8403021406969977594, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+--- !u!4 &5522613843011946763 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7266183814742614421, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+  m_PrefabInstance: {fileID: 2914655421313378462}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6696686461074158180 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8403021406969977594, guid: 456702244e6e36148b9fa1df223abc0a, type: 3}
+  m_PrefabInstance: {fileID: 2914655421313378462}
+  m_PrefabAsset: {fileID: 0}
