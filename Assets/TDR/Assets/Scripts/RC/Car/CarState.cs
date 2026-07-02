@@ -20,6 +20,12 @@ namespace TS.Generics
         [Header("Car Type")]
         public CarPlayerType        carPlayerType = CarPlayerType.Human;
 
+        // Additive control assist flag, independent of carPlayerType/currentGameMode.
+        // When true, CarPlayerInputs suppresses its own free-steering loop so
+        // CarPathFollowPlayerInput is the sole driver of this vehicle.
+        [HideInInspector]
+        public bool                 isPathFollowAssistEnabled = false;
+
         [Header("Car Inputs")]
         public CarSteeringDirection steeringDir;
         [HideInInspector]

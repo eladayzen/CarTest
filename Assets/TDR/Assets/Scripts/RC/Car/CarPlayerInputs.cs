@@ -81,7 +81,8 @@ namespace TS.Generics
             #region
             if (b_InitDone &&
                 isPlayerAHuman() &&
-                isInputEnabled)
+                isInputEnabled &&
+                !carState.isPathFollowAssistEnabled)
                 return true;
 
             return false;
@@ -214,7 +215,7 @@ namespace TS.Generics
             #endregion
         }
 
-        float ReturnPlayerSteerRatio()
+        public float ReturnPlayerSteerRatio()
         {
             #region
             bool leftKey = InfoInputs.instance.ListOfInputsForEachPlayer[vehicleInfo.playerNumber].listOfButtons[TSInputKeyLeft].b_GetKeyDown;

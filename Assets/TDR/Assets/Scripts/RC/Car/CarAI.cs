@@ -459,7 +459,7 @@ namespace TS.Generics
             #endregion
         }
 
-        float DesiredSteer()
+        public float DesiredSteer()
         {
             #region
             Vector3 offsetTargetPos = targetOne.position;
@@ -474,7 +474,7 @@ namespace TS.Generics
             #endregion
         }
 
-        float DesiredAcceleration()
+        public float DesiredAcceleration()
         {
             #region
             // Choose the desired speed

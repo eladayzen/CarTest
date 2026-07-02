@@ -3,7 +3,29 @@
     "allow": [
       "Bash(git ls-remote *)",
       "Bash(git init *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git restore *)",
+      "Bash(git rm *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git branch *)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Bash(gh auth *)",
+      "Bash(git config *)",
+      "Read(//Users/eladayzen/**)",
+      "Bash(security find-internet-password *)",
+      "Bash(mkdir -p ~/.ssh)",
+      "Bash(ssh-keygen -t ed25519 -C \"amitk@particula-tech.com\" -f ~/.ssh/id_ed25519_github -N \"\")",
+      "Read(//Users/eladayzen/.ssh/**)",
+      "Bash(ssh *)",
+      "Bash(git rev-list *)",
+      "Bash(git cat-file *)",
+      "Bash(sort -k3 -n -r)",
+      "Bash(python3 -c \"import fitz\")",
+      "Bash(python3 -c \"import PyPDF2\")",
+      "Bash(python3 -c \"import pypdf\")",
+      "Bash(pip3 install *)",
+      "Bash(python3)"
     ]
   },
   "enabledMcpjsonServers": [
