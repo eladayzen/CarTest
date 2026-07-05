@@ -11,9 +11,40 @@
       window.addEventListener('unhandledrejection', function (e) {
         if (window.Unity) window.Unity.call('JS UNHANDLED REJECTION: ' + e.reason);
       });
+      // rAF shim: WKWebView inside the Unity Editor treats this view as occluded and fully
+      // suspends requestAnimationFrame (confirmed: raf=0 forever while event-driven JS runs).
+      // Queue callbacks instead; they are flushed either by native rAF (real browser -
+      // unchanged behavior) or by Unity calling window.__pumpFrames() every Unity frame.
+      (function () {
+        var nativeRAF = window.requestAnimationFrame.bind(window);
+        window.__rafQueue = [];
+        window.requestAnimationFrame = function (cb) { window.__rafQueue.push(cb); return window.__rafQueue.length; };
+        window.cancelAnimationFrame = function () {};
+        window.__pumpFrames = function () {
+          var q = window.__rafQueue;
+          if (!q.length) return;
+          window.__rafQueue = [];
+          var t = performance.now();
+          for (var i = 0; i < q.length; i++) {
+            try { q[i](t); }
+            catch (e) { if (window.Unity) window.Unity.call('RAF CB ERROR: ' + e.message); }
+          }
+        };
+        (function nativeLoop() { nativeRAF(function () { window.__pumpFrames(); nativeLoop(); }); })();
+      })();
+      // Diagnostics: count rAF frames and timer ticks so the Unity side can tell whether
+      // time-driven JS runs at all in this WebView (event-driven JS provably does).
+      window.__diag = { t0: Date.now(), raf: 0, iv: 0, to: 0, moduleRan: 0 };
+      (function () {
+        function rafLoop() { window.__diag.raf++; requestAnimationFrame(rafLoop); }
+        requestAnimationFrame(rafLoop);
+        setInterval(function () { window.__diag.iv++; }, 250);
+        setTimeout(function () { window.__diag.to = 1; }, 500);
+      })();
     </script>
-    <script type="module" src="./assets/index-Yv72tYT_.js"></script>
-    <link rel="stylesheet" href="./assets/index-DB9kuC8G.css">
+    <script type="module">window.__diag.moduleRan = 1;</script>
+    <script type="module" src="./assets/index-Cq-UvTSE.js"></script>
+    <link rel="stylesheet" href="./assets/index-BQNDKNuP.css">
   </head>
   <body>
     <div id="app"></div>
@@ -30,8 +61,8 @@
 
     <div class="overlay" id="start-overlay">
       <h1>Ninja Turtle Tunnel</h1>
-      <p>Steer through the gaps and grab shells. Arrow keys / WASD, or drag on mobile.</p>
-      <button id="start-button">Start</button>
+      <p>Steer through the gaps and grab shells. Arrow keys / A D to turn left and right.</p>
+      <div class="countdown" id="countdown">5</div>
     </div>
 
     <div class="overlay hidden" id="gameover-overlay">

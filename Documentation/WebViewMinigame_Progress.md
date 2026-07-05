@@ -1,5 +1,14 @@
 # WebView Minigame Prototype — Progress
 
+> **RESOLVED (2026-07-05).** The "Start doesn't visibly start the game" bug is fixed and the
+> game now runs and plays inside the Editor webview. Root causes (all three were present at
+> once): (1) ES-module game code silently blocked on `file://` — now served via a local HTTP
+> server in the loader; (2) WKWebView suspends `requestAnimationFrame` entirely for the occluded
+> Editor overlay — now driven by a rAF shim pumped from Unity's `Update()` at 60Hz; (3) keyboard
+> input never reaches the overlay — now forwarded from Unity as synthetic DOM key events.
+> Full write-up, do's & don'ts, and debugging playbook: `Documentation/WebView_Minigame_Guide.md`.
+> The sections below are the original investigation notes, kept for history.
+
 ## Goal
 
 Host a separately-built, non-Unity web minigame inside the Unity mobile app via an embedded

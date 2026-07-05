@@ -87,10 +87,16 @@ namespace TS.Generics
         IEnumerator InitRoutine()
         {
             #region
+            // Waiting on VehiclesRef.b_InitDone (the whole fleet, not just this car) closes a
+            // class of load-order races: this loop otherwise starts driving while other cars'
+            // VehiclePathFollow.Track refs are still null (DetectCarAhead NRE) and while
+            // PathObstacle's danger lists are still being built (ArgumentOutOfRange).
             yield return new WaitUntil(() =>
                 carController.isInitDone &&
                 vehiclePathFollow.b_InitDone &&
                 carPlayerInputs.b_InitDone &&
+                VehiclesRef.instance != null &&
+                VehiclesRef.instance.b_InitDone &&
                 InfoRememberMainMenuSelection.instance);
 
             // Only ever arm this for an actual human-controlled slot, never for AI-filled slots

@@ -42,7 +42,13 @@ namespace TS.Generics
                     //  Debug.Log("layer : " + col.gameObject.layer);
                     if (col.gameObject.layer == layerRefVehicle && col.GetComponent<VehicleTriggerTag>())
                     {
-                        int otherCarPathFollow = col.transform.parent.parent.parent.GetComponent<VehiclePathFollow>().Track.selectedId;
+                        // Null guard: on scene load the other car's VehiclePathFollow.Track is
+                        // null until its own init coroutine finishes - dereferencing unguarded
+                        // here threw NullReference when called during that window.
+                        VehiclePathFollow otherPathFollow = col.transform.parent.parent.parent.GetComponent<VehiclePathFollow>();
+                        if (otherPathFollow == null || otherPathFollow.Track == null || vehiclePath.Track == null)
+                            continue;
+                        int otherCarPathFollow = otherPathFollow.Track.selectedId;
                         if (cases == 0 &&
                             (otherCarPathFollow != vehiclePath.Track.selectedId))
                         {

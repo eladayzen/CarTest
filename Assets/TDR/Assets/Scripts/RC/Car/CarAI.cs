@@ -641,7 +641,14 @@ namespace TS.Generics
         {
             #region
             float desiredAcceleration = desiredAcc;
-            if (PathObs &&
+            // Bounds guard: PathObstacle builds dangerListByPath in a coroutine after vehicle
+            // init - on scene load there's a window where PathObs exists but the lists are
+            // still empty, and closestObstaclePathPos/selectedId can also briefly be stale.
+            // Indexing unguarded here threw ArgumentOutOfRange every physics frame.
+            bool obstacleDataReady = PathObs &&
+                vehiclePathFollow.Track.selectedId < PathObs.dangerListByPath.Count &&
+                closestObstaclePathPos < PathObs.dangerListByPath[vehiclePathFollow.Track.selectedId].DangerList.Count;
+            if (obstacleDataReady &&
               PathObs.dangerListByPath[vehiclePathFollow.Track.selectedId].DangerList[closestObstaclePathPos].DangerRatioLeft > 0 &&
                PathObs.dangerListByPath[vehiclePathFollow.Track.selectedId].DangerList[closestObstaclePathPos].DangerRatioRight > 0 &&
                m_Rigidbody.linearVelocity.magnitude > 20)
