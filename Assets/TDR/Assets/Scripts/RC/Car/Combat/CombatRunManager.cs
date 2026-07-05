@@ -22,7 +22,7 @@ namespace TS.Generics
         // Per-instance top-speed scale for enemies so the assisted player (itself slowed to
         // ~0.6 max speed) can actually catch and hold contact with them. Applied once at init
         // to each enemy's own CarController/CarAI instances only. 1 = no change.
-        public float                 enemySpeedMultiplier = 0.6f;
+        public float                 enemySpeedMultiplier = 0.99f;
 
         [Header("Ram Damage")]
         public float                 ramDamagePerSecond = 20f;
@@ -31,9 +31,19 @@ namespace TS.Generics
         public float                 impactBurstScale = 0.5f;
         public float                 impactBurstCap = 15f;
 
-        [Header("Debug Spike (Phase A)")]
-        // Distance ahead of the player (along the path) used by the recycle spike/teleport.
+        [Header("Wave Respawn (keep enemies near the player)")]
+        // Distance ahead of the player (along the path) where recycled enemies reappear.
         public float                 spawnAheadDistance = 80f;
+        // Engagement window relative to the player's path position: enemies inside
+        // [player - engagementBehind, player + engagementAhead] count as "engaged".
+        public float                 engagementBehind = 30f;
+        public float                 engagementAhead = 120f;
+        // Below this many engaged enemies, one gets recycled ahead of the player.
+        public int                   minEngagedEnemies = 2;
+        // A destroyed enemy stays gone at least this long before it can come back.
+        public float                 respawnDelaySeconds = 5f;
+        // Minimum spacing between two consecutive recycles.
+        public float                 recycleCooldownSeconds = 4f;
 
         [HideInInspector] public List<EnemyVehicleHealth> activeEnemies = new List<EnemyVehicleHealth>();
         [HideInInspector] public int killCount = 0;
@@ -112,6 +122,89 @@ namespace TS.Generics
 
             isReady = true;
             Debug.Log("[CombatRun] Active - enemies: " + activeEnemies.Count);
+
+            StartCoroutine(WaveRespawnRoutine());
+            #endregion
+        }
+
+        // ---------------------------------------------------------------------------------
+        // Wave respawn: every couple of seconds, count enemies engaged around the player;
+        // if too few, recycle one (dead first, else the one farthest outside the window) to
+        // spawnAheadDistance in front of the player - so the player is never alone for long.
+        // ---------------------------------------------------------------------------------
+        IEnumerator WaveRespawnRoutine()
+        {
+            #region
+            float lastRecycleTime = -999f;
+
+            while (true)
+            {
+                float t = 0f;
+                while (t < 2f)
+                {
+                    if (!PauseManager.instance.Bool_IsGamePaused) t += Time.deltaTime;
+                    yield return null;
+                }
+
+                if (playerPathFollow == null || playerPathFollow.Track == null) continue;
+                if (Time.time - lastRecycleTime < recycleCooldownSeconds) continue;
+
+                float pathLength = playerPathFollow.Track.pathLength;
+                float playerDist = playerPathFollow.progressDistance;
+
+                int engaged = 0;
+                EnemyVehicleHealth bestCandidate = null;
+                float bestCandidateScore = -1f;
+
+                foreach (EnemyVehicleHealth enemy in activeEnemies)
+                {
+                    if (enemy == null) continue;
+
+                    if (enemy.isDead || !enemy.gameObject.activeSelf)
+                    {
+                        // Dead: candidate once its respawn delay has passed. Dead beats any
+                        // alive-but-far candidate (score above the wrap-gap maximum).
+                        if (Time.time - enemy.deathTime >= respawnDelaySeconds &&
+                            bestCandidateScore < pathLength + 1f)
+                        {
+                            bestCandidate = enemy;
+                            bestCandidateScore = pathLength + 1f;
+                        }
+                        continue;
+                    }
+
+                    // Wrapped gap in [0, pathLength): 0..engagementAhead = ahead in window,
+                    // pathLength-engagementBehind..pathLength = behind in window. Works
+                    // whether progressDistance wraps at pathLength or accumulates.
+                    VehiclePathFollow vpf = enemy.GetComponent<VehiclePathFollow>();
+                    float gap = ((vpf.progressDistance - playerDist) % pathLength + pathLength) % pathLength;
+                    bool inWindow = gap <= engagementAhead || gap >= pathLength - engagementBehind;
+
+                    if (inWindow)
+                    {
+                        engaged++;
+                    }
+                    else
+                    {
+                        // Alive but out of range: score by how far behind the player it is.
+                        float behindDistance = pathLength - gap;
+                        if (behindDistance > bestCandidateScore)
+                        {
+                            bestCandidate = enemy;
+                            bestCandidateScore = behindDistance;
+                        }
+                    }
+                }
+
+                if (engaged >= minEngagedEnemies || bestCandidate == null) continue;
+
+                lastRecycleTime = Time.time;
+                TeleportEnemyOnPath(bestCandidate, PlayerPathDistance() + spawnAheadDistance);
+                bestCandidate.ResetCombatHealth();
+                bestCandidate.gameObject.SetActive(true);
+                Debug.Log("[CombatRun] Wave respawn: " + bestCandidate.name
+                    + " recycled ahead of player (engaged was " + engaged + ")");
+            }
             #endregion
         }
 
@@ -207,6 +300,10 @@ namespace TS.Generics
                 rb.linearVelocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
             }
+
+            // Portal effect at the arrival point, facing across the track.
+            CombatPortalFx.Spawn(enemy.transform.position + Vector3.up * 1.4f,
+                enemy.transform.rotation);
 
             if (LapCounterAndPosition.instance != null &&
                 vehicleInfo.playerNumber < LapCounterAndPosition.instance.posList.Count)

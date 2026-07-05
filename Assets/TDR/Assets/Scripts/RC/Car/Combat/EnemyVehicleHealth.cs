@@ -14,8 +14,10 @@ namespace TS.Generics
         public float                 maxHP = 100f;
         public float                 currentHP = 100f;
         public bool                  isDead = false;
+        [HideInInspector] public float deathTime = -999f;   // read by the wave-respawn loop
 
         CombatRunManager             manager;
+        EnemyDamageFx                damageFx;
         float                        lastLogTime = -999f;
 
         public void InitCombat(CombatRunManager _manager, float _maxHP)
@@ -35,6 +37,10 @@ namespace TS.Generics
 
             currentHP = Mathf.Max(0f, currentHP - amount);
 
+            // Visual feedback while hurt-but-alive: impact sparks + smoke ramping with damage.
+            if (damageFx == null) damageFx = gameObject.AddComponent<EnemyDamageFx>();
+            damageFx.OnDamaged(maxHP > 0f ? currentHP / maxHP : 0f);
+
             // Throttled log so OnCollisionStay's per-physics-step ticks stay readable.
             if (Time.time - lastLogTime > 0.5f)
             {
@@ -53,6 +59,7 @@ namespace TS.Generics
             #region
             currentHP = maxHP;
             isDead = false;
+            if (damageFx != null) damageFx.ResetFx();
             #endregion
         }
 
@@ -63,6 +70,7 @@ namespace TS.Generics
             #region
             if (isDead) return;
             isDead = true;
+            deathTime = Time.time;
 
             if (manager != null)
                 manager.NotifyEnemyDestroyed(this);

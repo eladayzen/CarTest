@@ -179,7 +179,8 @@ namespace TS.Generics
             #endregion
         }
 
-        static Texture2D SoftCircleTexture()
+        // Shared with EnemyDamageFx.
+        public static Texture2D SoftCircleTexture()
         {
             #region
             if (softCircleTex != null) return softCircleTex;

@@ -34,7 +34,17 @@
       "mcp__ai-game-developer__gameobject-component-modify",
       "mcp__ai-game-developer__assets-prefab-save",
       "mcp__ai-game-developer__assets-prefab-close",
-      "mcp__ai-game-developer__scene-list-opened"
+      "mcp__ai-game-developer__scene-list-opened",
+      "mcp__ai-game-developer__unity-tool-list",
+      "mcp__ai-game-developer__scene-save",
+      "mcp__ai-game-developer__scene-open",
+      "mcp__ai-game-developer__gameobject-duplicate",
+      "mcp__ai-game-developer__gameobject-component-get",
+      "mcp__ai-game-developer__gameobject-modify",
+      "Bash(grep -o \"start-button[^;]\\\\{0,200\\\\}\" /Users/eladayzen/ninja-turtle-tunnel/dist/assets/index-Yv72tYT_.js)",
+      "Bash(grep -o \"Cu=[^;]\\\\{0,400\\\\}\" /Users/eladayzen/ninja-turtle-tunnel/dist/assets/index-Yv72tYT_.js)",
+      "Bash(grep -o \"function Cu[^}]\\\\{0,400\\\\}\" /Users/eladayzen/ninja-turtle-tunnel/dist/assets/index-Yv72tYT_.js)",
+      "Bash(grep -o \"const Cu[^;]\\\\{0,400\\\\}\" /Users/eladayzen/ninja-turtle-tunnel/dist/assets/index-Yv72tYT_.js)"
     ]
   },
   "enabledMcpjsonServers": [
