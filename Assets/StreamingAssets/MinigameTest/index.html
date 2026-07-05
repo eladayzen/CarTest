@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Ninja Turtle Tunnel</title>
+    <script>
+      window.addEventListener('error', function (e) {
+        if (window.Unity) window.Unity.call('JS ERROR: ' + e.message + ' at ' + e.filename + ':' + e.lineno);
+      });
+      window.addEventListener('unhandledrejection', function (e) {
+        if (window.Unity) window.Unity.call('JS UNHANDLED REJECTION: ' + e.reason);
+      });
+    </script>
+    <script type="module" src="./assets/index-Yv72tYT_.js"></script>
+    <link rel="stylesheet" href="./assets/index-DB9kuC8G.css">
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <div class="hud">
+      <div>
+        <div class="score" id="score">0</div>
+        <div class="best" id="best">Best: 0</div>
+      </div>
+      <div>
+        <div class="score" id="gems">0</div>
+      </div>
+    </div>
+
+    <div class="overlay" id="start-overlay">
+      <h1>Ninja Turtle Tunnel</h1>
+      <p>Steer through the gaps and grab shells. Arrow keys / WASD, or drag on mobile.</p>
+      <button id="start-button">Start</button>
+    </div>
+
+    <div class="overlay hidden" id="gameover-overlay">
+      <h1>Wiped Out!</h1>
+      <p>Score: <span class="stat" id="final-score">0</span></p>
+      <button id="restart-button">Try Again</button>
+    </div>
+
+  </body>
+</html>

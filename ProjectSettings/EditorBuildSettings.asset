@@ -17,5 +17,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/TDR/Assets/Scenes/Tracks/Demo/02_MautikiIslandRevers.unity
     guid: c36884a94403c1f41bd65342d4951d6f
+  - enabled: 1
+    path: Assets/TDR/Assets/Scenes/Minigame/MinigameWebViewTest.unity
+    guid: 068634ce4ac0b41a389cc7d13a79069b
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
