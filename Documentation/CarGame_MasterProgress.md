@@ -133,6 +133,70 @@ not drawn, only the two edges (explicit user decision).
 `CarPathFollowPlayerInput.maxLateralOffset` — no automatic sync. If the car's clamp value changes,
 update this manually too. Main path only, same as Feature 1 (no alt-path awareness).
 
+## Feature 3: "Combat Run" Prototype Mode (TMNT-themed, in progress)
+
+**Purpose:** a new game mode layered on the path-follow assist: AI cars become enemy target
+vehicles with HP; the player destroys them primarily by holding contact (ram/grind damage), plus
+time-limited themed ability pickups (planned). Player input stays steering left/right only — all
+attacks auto-inflict. Full plan: `~/.claude/plans/purrfect-meandering-gray.md`.
+
+**Design decisions locked with user:**
+- Win condition = reach the finish line (existing lap/finish system untouched); kills are
+  score/fun, not the end condition.
+- Player is invulnerable in v1 (no player HP).
+- CarAI driving/avoidance logic untouched — user confirmed car contact already feels fine.
+- Prototype wiring only: scene GameObject + Inspector flag, no main-menu/`currentGameMode`
+  integration.
+- **Two themes planned for two builds** — "General" and "Teenage Mutant Ninja Turtles", TMNT
+  first. Abilities are theme content (Raphael pickup → rear icon + auto-fired explosive daggers;
+  Donatello → electro attacks), all auto-targeting by proximity. Placeholder art only for now.
+
+**Architecture (key insight: zero modifications to existing scripts, zero prefab edits):**
+- `CombatRunManager` on a `CombatRunMode` GameObject under `--> GAMEPLAY <--` in
+  `02_MautikiIsland.unity` (same opt-in-per-scene pattern as LaneGlowRenderer). Its init
+  coroutine waits for `VehiclesRef.b_InitDone` + the last car's `carPlayerType` flipping to `AI`
+  (that assignment happens post-countdown in `AssistantModesArcadeRC.bStep4`), then
+  `AddComponent`s combat components onto the spawned cars at runtime. Deleting the GameObject
+  removes the mode entirely.
+- Damage is structural: a *dealer* component only on the player's car, a *health* component only
+  on enemies — so enemy-vs-enemy contact does nothing and nothing can damage the player.
+- Deliberately NOT reusing `VehicleDamage.lifePoints`: its `VehicleExplosionAction` semantically
+  means "respawn to checkpoint" (CarRespawnV subscribes), its damage methods are empty stubs.
+- Death = `SetActive(false)` (disable-in-place), never `Destroy`: `CarAI.NextCar()` already
+  skips inactive cars (activeSelf checks), while `LapCounterAndPosition` reads every vehicle
+  transform with no null check and would NRE on a destroyed one.
+
+**Built so far (Phases A + partial B/E — all compiled clean, playtested by user):**
+- `Assets/TDR/Assets/Scripts/RC/Car/Combat/CombatRunManager.cs` — bootstrap + tuning knobs
+  (`enemyMaxHP` 100, `enemySpeedMultiplier` 0.6 applied per-instance to
+  `CarController.maxSpeed/refMaxSpeed` AND `CarAI.maxSpeedRef` so all three speed caches stay
+  consistent, `ramDamagePerSecond` 20, impact burst scale/cap). Also contains
+  `TeleportEnemyOnPath()` (replicates `CarController.VehicleOutOfLimitZoneRoutine`'s placement:
+  progressDistance + zeroed lateral offsets + `PositionOnPath` + ground raycast on `RespawnLayer`
+  + zeroed rb velocity + **writes `LapCounterAndPosition.posList[..].lastPathDistance`** — the
+  position tracker only searches ±100m around the last known distance) and the Phase-A de-risk
+  spike (`[ContextMenu] Debug Spike: Recycle First Enemy` — disable → teleport +80m ahead of
+  player → re-enable). Spike NOT yet confirmed by user playtest.
+- `Combat/EnemyVehicleHealth.cs` — float HP, single `ApplyDamage(amount, CombatDamageSource)`
+  entry point all damage funnels through, one-shot `isDead` guard, throttled HP logging.
+- `Combat/CombatRamDamageDealer.cs` — player-only; `OnCollisionStay` DPS
+  (`ramDPS × damageMultiplier × fixedDeltaTime`, DPS-primary so grinding beats bouncing) +
+  capped `OnCollisionEnter` burst; `damageMultiplier` is the future Ram Frenzy ability hook.
+  Enemy resolution via `collision.rigidbody?.GetComponent<EnemyVehicleHealth>()`.
+- `Combat/EnemyHealthBar.cs` — worldspace bar 2.6m above each enemy's roof, billboards to
+  `Camera.main`, polls HP in LateUpdate, green→red color lerp. Fully code-built canvas, no
+  scene/prefab UI edits.
+- Confirmed working in user playtest: ram damage ticks HP down, kill flow fires (4 kills logged).
+- Explosion VFX explicitly deferred by user — death is currently just the car vanishing.
+
+**Still to do (see plan file):** Phase C (pickups + `CombatThemeDefinition`/`AbilityDefinition`
+ScriptableObjects + Raphael daggers / Donatello electro / Ram Frenzy + rear icon), Phase D
+(wave loop teleporting dead/left-behind enemies to ~80m ahead of player, engagement window
+[player−30, player+120]), kill-counter UI, tuning pass. User also reported "many errors" during
+the playtest that have NOT yet been triaged (unknown whether pre-existing or combat-mode-caused).
+
+**NOT committed yet as of this update** — run `git status` before assuming saved.
+
 ## Git history (this thread's commits)
 
 - `76101a6` Initial commit: TDCars2 Unity project
@@ -141,7 +205,8 @@ update this manually too. Main path only, same as Feature 1 (no alt-path awarene
   crash fixed, `minSpeedFloor` tuning)
 - `fd142a5` Add per-instance turn-rate boost for path-follow assist
 - `36b7e02` Add max-speed reduction, general corner slowdown, and manual retune
-- **Lane-Edge Glow Lines (Feature 2) — not committed yet as of this doc.** Run `git status` to see
+- `7205137` Add lane-edge glow lines and master progress doc (Feature 2 landed here)
+- **Combat Run (Feature 3) — not committed yet as of this update.** Run `git status` to see
   current uncommitted state before assuming anything is saved.
 
 ## Environment / working notes for whoever picks this up
