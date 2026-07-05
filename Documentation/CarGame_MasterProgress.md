@@ -166,7 +166,10 @@ attacks auto-inflict. Full plan: `~/.claude/plans/purrfect-meandering-gray.md`.
   skips inactive cars (activeSelf checks), while `LapCounterAndPosition` reads every vehicle
   transform with no null check and would NRE on a destroyed one.
 
-**Built so far (Phases A + partial B/E — all compiled clean, playtested by user):**
+**Full Phase C/D/E design (theme/ability framework, wave spawning, UI): `Documentation/CombatRun_Plan.md`**
+(in-repo copy of the approved plan — a fresh session should read it before building Phase C).
+
+**Built so far (Phases A + B complete — compiled clean, core loop playtested by user):**
 - `Assets/TDR/Assets/Scripts/RC/Car/Combat/CombatRunManager.cs` — bootstrap + tuning knobs
   (`enemyMaxHP` 100, `enemySpeedMultiplier` 0.6 applied per-instance to
   `CarController.maxSpeed/refMaxSpeed` AND `CarAI.maxSpeedRef` so all three speed caches stay
@@ -186,16 +189,37 @@ attacks auto-inflict. Full plan: `~/.claude/plans/purrfect-meandering-gray.md`.
 - `Combat/EnemyHealthBar.cs` — worldspace bar 2.6m above each enemy's roof, billboards to
   `Camera.main`, polls HP in LateUpdate, green→red color lerp. Fully code-built canvas, no
   scene/prefab UI edits.
-- Confirmed working in user playtest: ram damage ticks HP down, kill flow fires (4 kills logged).
-- Explosion VFX explicitly deferred by user — death is currently just the car vanishing.
+- `Combat/CombatExplosionFx.cs` — code-built one-shot death explosion (no prefab/assets): fire
+  burst + smoke puffs on procedural soft-circle texture via `Sprites/Default` (URP-safe), HDR
+  emissive flash sphere (Bloom picks it up) + fading point light; spawned detached in
+  `NotifyEnemyDestroyed` right before `SetActive(false)`; self-destroys after 3s.
+- Confirmed working in user playtest: ram damage ticks HP down, kill flow fires, death
+  disables the car, HP bars visible.
+- **The "many errors" from playtesting were triaged and fixed** — all were load-order races
+  exposed because the assist starts driving earlier than AI cars ever did, hitting latent
+  unguarded code in the stock asset. Three MINIMAL existing-file changes now exist (the
+  "zero modifications" claim above no longer holds, but all three are pure safety guards):
+  - `CarAI.DesiredAccelerationDependingObstacleOnTrack`: bounds-check `selectedId`/
+    `closestObstaclePathPos` before indexing `dangerListByPath` (empty-on-load + alt-path).
+  - `DetectCarAhead.IsCollisionDetected`: skip cars whose `VehiclePathFollow`/`Track` are
+    still null during init.
+  - `CarPathFollowPlayerInput.InitRoutine`: also waits for `VehiclesRef.b_InitDone` (whole
+    fleet) before driving; obstacle-index refresh guarded per-path.
+- "Test Minigame" buttons added to `02_MautikiIsland` (pause menu + in-race HUD right edge),
+  wired to `ButtonCustom.LoadNewScene(4)` → the WebView minigame scene. UnityEvent rewiring is
+  only possible via `UnityEventTools` in script-execute, not MCP reflection tools.
 
-**Still to do (see plan file):** Phase C (pickups + `CombatThemeDefinition`/`AbilityDefinition`
-ScriptableObjects + Raphael daggers / Donatello electro / Ram Frenzy + rear icon), Phase D
-(wave loop teleporting dead/left-behind enemies to ~80m ahead of player, engagement window
-[player−30, player+120]), kill-counter UI, tuning pass. User also reported "many errors" during
-the playtest that have NOT yet been triaged (unknown whether pre-existing or combat-mode-caused).
+**Still to do:** Phase C (pickups + `CombatThemeDefinition`/`AbilityDefinition` ScriptableObjects
++ Raphael daggers / Donatello electro / Ram Frenzy + rear icon), Phase D (wave loop teleporting
+dead/left-behind enemies to ~80m ahead of player, engagement window [player−30, player+120] —
+note the Phase-A teleport/recycle debug spike was built but NEVER playtested; test it before
+building Phase D on top), Phase E (kill-counter UI, tuning pass). All per
+`Documentation/CombatRun_Plan.md`.
 
-**NOT committed yet as of this update** — run `git status` before assuming saved.
+**Committed & pushed** through `f7f5c01` (combat run in `7a5a217`, minigame buttons + crash
+guards in `b47ac79`/`f7f5c01`). Remaining uncommitted as of this update: a small
+`02_MautikiIsland.unity` diff from play sessions (verify it's not accidental before
+committing), `.claude/settings.local.json`, and the untracked `referance/` screenshot folder.
 
 ## Git history (this thread's commits)
 
