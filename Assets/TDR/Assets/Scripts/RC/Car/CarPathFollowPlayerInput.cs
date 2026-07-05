@@ -158,7 +158,14 @@ namespace TS.Generics
             //     runs for this (Human-flagged) car, so without this DesiredAcceleration()'s
             //     obstacle branch below indexes with a stale/out-of-range value on tracks that
             //     have a PathObstacle configured.
-            if (carAI.PathObs != null)
+            //     Guarded per-path: Track.selectedId switches to the alt-path index when the car
+            //     drives through an alt-path trigger, and dangerListByPath has no entry for alt
+            //     paths - calling through with that id throws ArgumentOutOfRange every physics
+            //     frame (and an empty DangerList would divide-by-zero inside on the next call).
+            if (carAI.PathObs != null &&
+                carAI.PathObs.dangerListByPath != null &&
+                vehiclePathFollow.Track.selectedId < carAI.PathObs.dangerListByPath.Count &&
+                carAI.PathObs.dangerListByPath[vehiclePathFollow.Track.selectedId].DangerList.Count > 0)
                 carAI.closestObstaclePathPos = carAI.CloseFromPathObstaclePosition();
 
             // 4) Baseline throttle + steer reused from CarAI - pure reuse, no duplicated logic.
