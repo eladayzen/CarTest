@@ -45,11 +45,24 @@ namespace TS.Generics
         // Minimum spacing between two consecutive recycles.
         public float                 recycleCooldownSeconds = 4f;
 
+        [Header("Chase Assist (experimental - rubber-band the single nearest car ahead)")]
+        public bool                  enableChaseAssist = false;
+        // Target car's speed while it's "the chase target," relative to its own normal
+        // (post-enemySpeedMultiplier) speed.
+        public float                 chaseSlowdownMultiplier = 0.85f;
+        // Only slow the nearest-ahead car if it's within this path-distance - a car essentially
+        // a lap away shouldn't get artificially slowed for no visible reason.
+        public float                 chaseAssistMaxRange = 60f;
+        // Hysteresis: don't drop the current chase target for a new candidate unless the new
+        // one is at least this much closer, so two nearly-tied cars don't flicker as the target.
+        public float                 chaseTargetSwitchMargin = 5f;
+
         [HideInInspector] public List<EnemyVehicleHealth> activeEnemies = new List<EnemyVehicleHealth>();
         [HideInInspector] public int killCount = 0;
 
         VehiclePathFollow            playerPathFollow;
         CombatRamDamageDealer        playerRamDealer;
+        EnemyVehicleHealth           currentChaseTarget = null;
         bool                         isReady = false;
 
         void Awake()
@@ -110,7 +123,7 @@ namespace TS.Generics
 
                     vehicles[i].gameObject.AddComponent<EnemyHealthBar>().InitBar(health);
 
-                    ApplyEnemySpeedMultiplier(vehicles[i].gameObject);
+                    ApplyEnemySpeedMultiplier(vehicles[i].gameObject, health);
                 }
                 else
                 {
@@ -124,6 +137,7 @@ namespace TS.Generics
             Debug.Log("[CombatRun] Active - enemies: " + activeEnemies.Count);
 
             StartCoroutine(WaveRespawnRoutine());
+            StartCoroutine(ChaseAssistRoutine());
             #endregion
         }
 
@@ -211,19 +225,137 @@ namespace TS.Generics
         // Only ever touches this enemy's own component instances - same per-instance pattern as
         // CarPathFollowPlayerInput.InitRoutine. All three speed caches are scaled together so
         // CarAI's obstacle-slowdown restore logic (which writes carController.maxSpeed back from
-        // its own refs) stays consistent.
-        void ApplyEnemySpeedMultiplier(GameObject enemy)
+        // its own refs) stays consistent. Also caches the resulting maxSpeedRef on the health
+        // component as the "normal" baseline Chase Assist restores to.
+        void ApplyEnemySpeedMultiplier(GameObject enemy, EnemyVehicleHealth health)
         {
             #region
-            if (enemySpeedMultiplier == 1f) return;
-
             CarController carController = enemy.GetComponent<CarController>();
             CarAI carAI = enemy.GetComponent<CarAI>();
 
-            carController.maxSpeed *= enemySpeedMultiplier;
-            carController.refMaxSpeed = carController.maxSpeed;
+            if (enemySpeedMultiplier != 1f)
+            {
+                carController.maxSpeed *= enemySpeedMultiplier;
+                carController.refMaxSpeed = carController.maxSpeed;
+                if (carAI != null)
+                    carAI.maxSpeedRef *= enemySpeedMultiplier;
+            }
+
             if (carAI != null)
-                carAI.maxSpeedRef *= enemySpeedMultiplier;
+                health.baseMaxSpeedRef = carAI.maxSpeedRef;
+            #endregion
+        }
+
+        // ---------------------------------------------------------------------------------
+        // Chase Assist (experimental): rubber-band only the single nearest enemy car ahead of
+        // the player, so the player can close the gap and hold a ram. Every other car on track
+        // is unaffected. CarAI.cs continuously fights direct writes to CarController.maxSpeed
+        // (TakeCareOfObstacles restores toward maxSpeedRef every FixedUpdate, UpdateAIState
+        // force-resets it in the Overtaken state) - so this works the same way
+        // ApplyEnemySpeedMultiplier does: temporarily lower carAI.maxSpeedRef on exactly the
+        // targeted car, and restore it the moment that car stops being the target.
+        // ---------------------------------------------------------------------------------
+        IEnumerator ChaseAssistRoutine()
+        {
+            #region
+            while (true)
+            {
+                float t = 0f;
+                while (t < 0.25f)
+                {
+                    if (!PauseManager.instance.Bool_IsGamePaused) t += Time.deltaTime;
+                    yield return null;
+                }
+
+                if (!enableChaseAssist)
+                {
+                    if (currentChaseTarget != null) ReleaseChaseTarget();
+                    continue;
+                }
+
+                if (playerPathFollow == null || playerPathFollow.Track == null) continue;
+
+                float pathLength = playerPathFollow.Track.pathLength;
+                float playerDist = playerPathFollow.progressDistance;
+
+                // Nearest ahead: same wrap-aware gap formula as WaveRespawnRoutine. Once the
+                // player passes a car, its gap jumps from ~0 to ~pathLength, so it naturally
+                // stops being "nearest" on its own - no special-case needed for that.
+                EnemyVehicleHealth nearest = null;
+                float nearestGap = float.MaxValue;
+
+                foreach (EnemyVehicleHealth enemy in activeEnemies)
+                {
+                    if (enemy == null || enemy.isDead || !enemy.gameObject.activeSelf) continue;
+
+                    VehiclePathFollow vpf = enemy.GetComponent<VehiclePathFollow>();
+                    float gap = ((vpf.progressDistance - playerDist) % pathLength + pathLength) % pathLength;
+
+                    if (gap < nearestGap)
+                    {
+                        nearestGap = gap;
+                        nearest = enemy;
+                    }
+                }
+
+                bool nearestInRange = nearest != null && nearestGap <= chaseAssistMaxRange;
+
+                if (!nearestInRange)
+                {
+                    if (currentChaseTarget != null) ReleaseChaseTarget();
+                    continue;
+                }
+
+                if (currentChaseTarget == null)
+                {
+                    SetChaseTarget(nearest);
+                }
+                else if (nearest == currentChaseTarget)
+                {
+                    // Re-apply every tick (not just on switch) so live-tuning
+                    // chaseSlowdownMultiplier in the Inspector during Play Mode takes effect
+                    // immediately on the currently-held target, same as the rest of this system.
+                    SetChaseTarget(currentChaseTarget);
+                }
+                else
+                {
+                    VehiclePathFollow currentVpf = currentChaseTarget.GetComponent<VehiclePathFollow>();
+                    float currentGap = ((currentVpf.progressDistance - playerDist) % pathLength + pathLength) % pathLength;
+
+                    if (currentGap - nearestGap >= chaseTargetSwitchMargin)
+                    {
+                        ReleaseChaseTarget();
+                        SetChaseTarget(nearest);
+                    }
+                }
+            }
+            #endregion
+        }
+
+        void SetChaseTarget(EnemyVehicleHealth target)
+        {
+            #region
+            bool isNewTarget = target != currentChaseTarget;
+            currentChaseTarget = target;
+            CarAI carAI = target.GetComponent<CarAI>();
+            if (carAI != null)
+                carAI.maxSpeedRef = target.baseMaxSpeedRef * chaseSlowdownMultiplier;
+            if (isNewTarget)
+                Debug.Log("[CombatRun] Chase target: " + target.name);
+            #endregion
+        }
+
+        void ReleaseChaseTarget()
+        {
+            #region
+            if (currentChaseTarget != null)
+            {
+                CarAI carAI = currentChaseTarget.GetComponent<CarAI>();
+                if (carAI != null)
+                    carAI.maxSpeedRef = currentChaseTarget.baseMaxSpeedRef;
+                Debug.Log("[CombatRun] Chase target released: " + currentChaseTarget.name);
+            }
+            currentChaseTarget = null;
             #endregion
         }
 
@@ -237,6 +369,18 @@ namespace TS.Generics
             killCount++;
             Debug.Log("[CombatRun] Enemy destroyed (" + enemy.name + ") - kills: " + killCount);
             CombatExplosionFx.Spawn(enemy.transform.position + Vector3.up * 1f);
+
+            // Restore immediately rather than waiting up to 0.25s for the next Chase Assist
+            // tick - this enemy is about to be recycled by WaveRespawnRoutine and must not come
+            // back still slowed.
+            if (currentChaseTarget == enemy)
+            {
+                CarAI carAI = enemy.GetComponent<CarAI>();
+                if (carAI != null)
+                    carAI.maxSpeedRef = enemy.baseMaxSpeedRef;
+                currentChaseTarget = null;
+            }
+
             enemy.gameObject.SetActive(false);
             #endregion
         }

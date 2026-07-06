@@ -15,6 +15,9 @@ namespace TS.Generics
         public float                 currentHP = 100f;
         public bool                  isDead = false;
         [HideInInspector] public float deathTime = -999f;   // read by the wave-respawn loop
+        // Cached "normal" CarAI.maxSpeedRef (post global enemySpeedMultiplier, pre Chase Assist)
+        // that Chase Assist restores to when this car stops being the chase target.
+        [HideInInspector] public float baseMaxSpeedRef;
 
         CombatRunManager             manager;
         EnemyDamageFx                damageFx;
