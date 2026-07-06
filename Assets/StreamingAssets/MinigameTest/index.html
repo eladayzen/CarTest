@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Ninja Turtle Tunnel</title>
+    <title>Astro Tunnel</title>
     <script>
       window.addEventListener('error', function (e) {
         if (window.Unity) window.Unity.call('JS ERROR: ' + e.message + ' at ' + e.filename + ':' + e.lineno);
@@ -32,6 +32,16 @@
         };
         (function nativeLoop() { nativeRAF(function () { window.__pumpFrames(); nativeLoop(); }); })();
       })();
+      // WKWebView's occlusion of this overlay also drives document.hidden/visibilityState true,
+      // same root cause as the rAF suspension above. This bundle's clock zeroes its delta
+      // whenever document.hidden is true (document.hidden===!0?this._delta=0:...), which is
+      // what showed up as "laggy and slow" rather than fully frozen. Force it to always read as
+      // visible. Gated on window.Unity so a real browser tab (no Unity bridge) keeps normal
+      // tab-switching/pause behavior unchanged.
+      if (window.Unity) {
+        Object.defineProperty(document, 'hidden', { get: function () { return false; }, configurable: true });
+        Object.defineProperty(document, 'visibilityState', { get: function () { return 'visible'; }, configurable: true });
+      }
       // Diagnostics: count rAF frames and timer ticks so the Unity side can tell whether
       // time-driven JS runs at all in this WebView (event-driven JS provably does).
       window.__diag = { t0: Date.now(), raf: 0, iv: 0, to: 0, moduleRan: 0 };
@@ -43,32 +53,34 @@
       })();
     </script>
     <script type="module">window.__diag.moduleRan = 1;</script>
-    <script type="module" src="./assets/index-Cq-UvTSE.js"></script>
-    <link rel="stylesheet" href="./assets/index-BQNDKNuP.css">
+    <script type="module" crossorigin src="/assets/index-K-naWNoe.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CMFeLcXv.css">
   </head>
   <body>
-    <div id="app"></div>
+    <div id="stage">
+      <div id="app"></div>
 
-    <div class="hud">
-      <div>
-        <div class="score" id="score">0</div>
-        <div class="best" id="best">Best: 0</div>
+      <div class="hud">
+        <div>
+          <div class="score" id="score">0</div>
+          <div class="best" id="best">Best: 0</div>
+        </div>
+        <div>
+          <div class="score" id="gems">0</div>
+        </div>
       </div>
-      <div>
-        <div class="score" id="gems">0</div>
+
+      <div class="overlay" id="start-overlay">
+        <h1>Astro Tunnel</h1>
+        <p>Steer through the gaps and grab gems. Arrow keys / A D to turn left and right.</p>
+        <div class="countdown" id="countdown">5</div>
       </div>
-    </div>
 
-    <div class="overlay" id="start-overlay">
-      <h1>Ninja Turtle Tunnel</h1>
-      <p>Steer through the gaps and grab shells. Arrow keys / A D to turn left and right.</p>
-      <div class="countdown" id="countdown">5</div>
-    </div>
-
-    <div class="overlay hidden" id="gameover-overlay">
-      <h1>Wiped Out!</h1>
-      <p>Score: <span class="stat" id="final-score">0</span></p>
-      <button id="restart-button">Try Again</button>
+      <div class="overlay hidden" id="gameover-overlay">
+        <h1>Crashed!</h1>
+        <p>Score: <span class="stat" id="final-score">0</span></p>
+        <button id="restart-button">Try Again</button>
+      </div>
     </div>
 
   </body>

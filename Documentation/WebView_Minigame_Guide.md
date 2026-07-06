@@ -51,6 +51,28 @@ game loaded-but-inert.
   **capped at 60Hz** — pumping every Unity frame ties game speed to the Editor's uncapped,
   variable framerate (fast-forward on a fast frame, slow-motion under load).
 
+### 3a. `document.hidden` is also true, and game code often branches on it separately
+
+The same WKWebView occlusion that suspends `requestAnimationFrame` (issue 2) also makes
+`document.hidden` report `true` / `visibilityState` report `'hidden'` permanently. The rAF shim
+doesn't fix this — it only intercepts `requestAnimationFrame` itself. Any game code that checks
+`document.hidden` *separately* (a clock utility zeroing its delta, a custom tick function falling
+back to a slow `setTimeout`, a `visibilitychange` listener that auto-pauses) still takes the
+"page is backgrounded" path forever. Symptom: the game runs, but crawls at ~5-10fps or drifts in
+slow motion — **laggy and slow, not frozen** (that's issue 2's symptom). Seen in both minigames so
+far (Astro Tunnel's bundled clock, NinjaTurtleRunner's own `tick()`).
+
+**Fix (implemented):** override `document.hidden`/`visibilityState` to always report visible,
+gated on `window.Unity` existing (injected by the native webview bridge before page scripts run)
+so a real, non-embedded browser tab keeps normal tab-switching/pause behavior:
+```js
+if (window.Unity) {
+  Object.defineProperty(document, 'hidden', { get: () => false, configurable: true });
+  Object.defineProperty(document, 'visibilityState', { get: () => 'visible', configurable: true });
+}
+```
+Add this to the `<head>` shim block, same place as the rAF shim, for every new minigame.
+
 ### 3. Real input never reaches the webview overlay
 
 The webview is a **native OS overlay window on top of the Unity Game view**, not part of
