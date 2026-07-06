@@ -17,6 +17,10 @@ namespace TS.Generics
 {
     public class MinigameWebViewLoader : MonoBehaviour
     {
+        // StreamingAssets subfolder to serve - set per-scene in the Inspector so multiple
+        // minigames can each get their own MinigameWebViewLoader scene instance.
+        public string                 minigameFolderName = "MinigameTest";
+
         WebViewObject webViewObject;
         HttpListener  httpListener;
         string        rootDir;
@@ -25,7 +29,7 @@ namespace TS.Generics
         void Start()
         {
             #region
-            rootDir = System.IO.Path.Combine(Application.streamingAssetsPath, "MinigameTest");
+            rootDir = System.IO.Path.Combine(Application.streamingAssetsPath, minigameFolderName);
             port = StartLocalServer();
             if (port < 0)
             {
