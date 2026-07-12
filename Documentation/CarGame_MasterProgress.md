@@ -209,17 +209,42 @@ attacks auto-inflict. Full plan: `~/.claude/plans/purrfect-meandering-gray.md`.
   (and their test buttons/scenes/package dependency) were removed on 2026-07-12; the project
   is now focused solely on the car game.
 
-**Still to do:** Phase C (pickups + `CombatThemeDefinition`/`AbilityDefinition` ScriptableObjects
-+ Raphael daggers / Donatello electro / Ram Frenzy + rear icon), Phase D (wave loop teleporting
-dead/left-behind enemies to ~80m ahead of player, engagement window [player−30, player+120] —
-note the Phase-A teleport/recycle debug spike was built but NEVER playtested; test it before
-building Phase D on top), Phase E (kill-counter UI, tuning pass). All per
-`Documentation/CombatRun_Plan.md`.
+**Phase D (wave respawn) done** (commit `1113c8c`): `CombatRunManager.WaveRespawnRoutine` counts
+engaged enemies in `[player−engagementBehind, player+engagementAhead]` every ~2s; below
+`minEngagedEnemies`, recycles a dead-or-farthest enemy to `player+spawnAheadDistance` via
+`TeleportEnemyOnPath` (respawn-delay + recycle-cooldown gated). `CombatPortalFx.cs` plays a
+code-built cyan portal flash at the arrival point. **The Phase-A teleport/recycle debug spike
+was never explicitly confirmed playtested on its own** — if wave respawn ever looks flaky,
+check that first.
 
-**Committed & pushed** through `f7f5c01` (combat run in `7a5a217`, minigame buttons + crash
-guards in `b47ac79`/`f7f5c01`). Remaining uncommitted as of this update: a small
-`02_MautikiIsland.unity` diff from play sessions (verify it's not accidental before
-committing), `.claude/settings.local.json`, and the untracked `referance/` screenshot folder.
+**Experimental Chase Assist added** (commit `21ccc4c`, opt-in via `enableChaseAssist`, off by
+default): rubber-bands only the single nearest enemy ahead of the player (temporarily lowers
+just that car's `CarAI.maxSpeedRef`) so the player can close the gap and hold a ram, without
+touching any other car. Hysteresis via `chaseTargetSwitchMargin` avoids target flicker.
+
+**Phase C framework landed 2026-07-12** (commit `123c2f4`): `AbilityDefinition` +
+`CombatThemeDefinition` ScriptableObjects (`Assets > Create > Combat Run` menu),
+`CarAbilityController` (player-only, structural typing like the ram dealer, one buff active at
+a time, pause-aware duration, worldspace billboard rear icon), `CombatPickup` (OvertakeTrigger-
+pattern trigger + pause-aware respawn cooldown), `CombatPickupSpawner` (`TS/Track/Race/`,
+path-sampling scatter, builds pickup visuals procedurally at runtime — no prefab/material assets
+needed). Only **RamFrenzy** (×3 damage multiplier on `CombatRamDamageDealer`) is wired
+end-to-end; `ProjectileDagger`/`ElectroZap` exist in the `CombatAttackType` enum but log a clear
+"not implemented" warning if picked — Raphael daggers / Donatello electro still need building.
+
+**Still to do:**
+1. **In-Editor wiring for Phase C** (blocked this session on Unity MCP reauth — do this first):
+   create one `AbilityDefinition` asset (Ram Frenzy) and one `CombatThemeDefinition` asset
+   referencing it, assign it to `CombatRunManager.theme`, add a `CombatPickupSpawner` component
+   to the `CombatRunMode` scene GameObject, then playtest that a pickup grants the buff.
+2. Implement `ProjectileDagger` (Raphael) and `ElectroZap` (Donatello) attack execution in
+   `CarAbilityController.ApplyEffect` + a new `AbilityProjectile.cs` for the dagger.
+3. Phase E: kill-counter UI, tuning pass. All per `Documentation/CombatRun_Plan.md`.
+
+**Committed & pushed** through `123c2f4` (Phase C framework). Earlier: Phase D + portal FX +
+enemy speed multiplier in `1113c8c`, Chase Assist in `21ccc4c`, original combat run in `7a5a217`,
+minigame buttons + crash guards in `b47ac79`/`f7f5c01`. Working tree is clean as of this update —
+run `git status` to confirm before assuming anything is uncommitted.
 
 ## Git history (this thread's commits)
 
@@ -230,8 +255,14 @@ committing), `.claude/settings.local.json`, and the untracked `referance/` scree
 - `fd142a5` Add per-instance turn-rate boost for path-follow assist
 - `36b7e02` Add max-speed reduction, general corner slowdown, and manual retune
 - `7205137` Add lane-edge glow lines and master progress doc (Feature 2 landed here)
-- **Combat Run (Feature 3) — not committed yet as of this update.** Run `git status` to see
-  current uncommitted state before assuming anything is saved.
+- `7a5a217` Combat Run Feature 3: Phases A+B (enemy HP, ram damage, death sequence)
+- `b47ac79`/`f7f5c01` Minigame buttons + load-order crash guards (minigame work since removed)
+- `1113c8c` Combat Run Phase D: wave respawn + portal FX, enemy speed multiplier bump
+- `21ccc4c` Combat Run: experimental Chase Assist
+- `ccfa034`/`0cc3be0`/`d008983` Strip project to car-game-only content (removed WebView
+  minigames, stock Unity template boilerplate, TDR asset pack's bundled demo/tutorial content)
+- `123c2f4` Combat Run Phase C framework: pickups + ability buffs (Ram Frenzy wired)
+- Run `git status`/`git log` to confirm nothing has drifted since this was last updated.
 
 ## Environment / working notes for whoever picks this up
 
