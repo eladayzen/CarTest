@@ -205,9 +205,9 @@ attacks auto-inflict. Full plan: `~/.claude/plans/purrfect-meandering-gray.md`.
     still null during init.
   - `CarPathFollowPlayerInput.InitRoutine`: also waits for `VehiclesRef.b_InitDone` (whole
     fleet) before driving; obstacle-index refresh guarded per-path.
-- "Test Minigame" buttons added to `02_MautikiIsland` (pause menu + in-race HUD right edge),
-  wired to `ButtonCustom.LoadNewScene(4)` → the WebView minigame scene. UnityEvent rewiring is
-  only possible via `UnityEventTools` in script-execute, not MCP reflection tools.
+- ~~"Test Minigame" buttons added to `02_MautikiIsland`~~ — the WebView minigame experiments
+  (and their test buttons/scenes/package dependency) were removed on 2026-07-12; the project
+  is now focused solely on the car game.
 
 **Still to do:** Phase C (pickups + `CombatThemeDefinition`/`AbilityDefinition` ScriptableObjects
 + Raphael daggers / Donatello electro / Ram Frenzy + rear icon), Phase D (wave loop teleporting

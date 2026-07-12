@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/TDR/Demo/Demo.unity
-    guid: 7200e15f527e94849899909ba9cb0357
-  - enabled: 1
     path: Assets/TDR/Assets/Scenes/MainMenu/01_MM.unity
     guid: c8d28914a55c14b49b428d4baffc9165
   - enabled: 1
@@ -17,11 +14,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/TDR/Assets/Scenes/Tracks/Demo/02_MautikiIslandRevers.unity
     guid: c36884a94403c1f41bd65342d4951d6f
-  - enabled: 1
-    path: Assets/TDR/Assets/Scenes/Minigame/MinigameWebViewTest.unity
-    guid: 068634ce4ac0b41a389cc7d13a79069b
-  - enabled: 1
-    path: Assets/TDR/Assets/Scenes/Minigame/NinjaTurtleRunnerTest.unity
-    guid: b5b0ad6ebfd934a548a9a9bb4bf0108b
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
