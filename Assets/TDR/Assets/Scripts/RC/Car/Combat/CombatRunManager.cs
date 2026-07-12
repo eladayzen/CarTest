@@ -45,6 +45,11 @@ namespace TS.Generics
         // Minimum spacing between two consecutive recycles.
         public float                 recycleCooldownSeconds = 4f;
 
+        [Header("Abilities (Phase C)")]
+        // Single swap point for a different theme later (e.g. General vs TMNT); prototype just
+        // assigns the TMNT asset here. CombatPickupSpawner reads this to know what to scatter.
+        public CombatThemeDefinition  theme;
+
         [Header("Chase Assist (experimental - rubber-band the single nearest car ahead)")]
         public bool                  enableChaseAssist = false;
         // Target car's speed while it's "the chase target," relative to its own normal
@@ -130,6 +135,8 @@ namespace TS.Generics
                     playerPathFollow = vehicles[i].GetComponent<VehiclePathFollow>();
                     playerRamDealer = vehicles[i].gameObject.AddComponent<CombatRamDamageDealer>();
                     playerRamDealer.InitCombat(this);
+
+                    vehicles[i].gameObject.AddComponent<CarAbilityController>().InitCombat(this);
                 }
             }
 
