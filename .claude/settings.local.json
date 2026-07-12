@@ -44,7 +44,15 @@
       "Bash(grep -o \"start-button[^;]\\\\{0,200\\\\}\" /Users/eladayzen/ninja-turtle-tunnel/dist/assets/index-Yv72tYT_.js)",
       "Bash(grep -o \"Cu=[^;]\\\\{0,400\\\\}\" /Users/eladayzen/ninja-turtle-tunnel/dist/assets/index-Yv72tYT_.js)",
       "Bash(grep -o \"function Cu[^}]\\\\{0,400\\\\}\" /Users/eladayzen/ninja-turtle-tunnel/dist/assets/index-Yv72tYT_.js)",
-      "Bash(grep -o \"const Cu[^;]\\\\{0,400\\\\}\" /Users/eladayzen/ninja-turtle-tunnel/dist/assets/index-Yv72tYT_.js)"
+      "Bash(grep -o \"const Cu[^;]\\\\{0,400\\\\}\" /Users/eladayzen/ninja-turtle-tunnel/dist/assets/index-Yv72tYT_.js)",
+      "Bash(jq .result[-15:] /Users/eladayzen/.claude/projects/-Users-eladayzen-UnityProjects-TDCars2/241601b2-aa9d-4e76-a1c1-b749d14c9f84/tool-results/mcp-ai-game-developer-console-get-logs-1783246822634.txt)",
+      "Bash(awk 'NR>=252350 && NR<=252500{print NR\": \"$0}' /Users/eladayzen/UnityProjects/TDCars2/Assets/TDR/Assets/Scenes/Tracks/Demo/02_MautikiIsland.unity)",
+      "Bash(awk 'NR>=267900 && NR<=268150{print NR\": \"$0}' /Users/eladayzen/UnityProjects/TDCars2/Assets/TDR/Assets/Scenes/Tracks/Demo/02_MautikiIsland.unity)",
+      "Bash(awk NR>=267900 && NR<=268100{print NR\": \"$0} *)",
+      "Bash(python3 *)",
+      "Bash(git diff *)",
+      "Bash(git apply *)",
+      "Bash(git commit *)"
     ]
   },
   "enabledMcpjsonServers": [
