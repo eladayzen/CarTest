@@ -261,23 +261,46 @@ needed). New `CombatBuffHUD.cs`: first code-built Screen Space Overlay UI in the
 **Stage 2, not built**: animate slots appearing/disappearing instead of always showing dimmed.
 New `Ability_SpeedBoost.asset`, added to `Theme_TMNT.asset`.
 
-**Nothing in this session has been playtested yet** — the Ram Frenzy fix, and everything in the
-category/Speed-Boost/HUD landing, both need an actual drive before trusting either works.
+**Denser waves + faster catch-up + initial clustering landed** (commit `9ab5ecb`): the old
+one-recycle-per-check + global `recycleCooldownSeconds` throttle in `WaveRespawnRoutine` made
+catching up to a higher `minEngagedEnemies` target take tens of seconds after a kill streak -
+replaced with a catch-up burst (recycle repeatedly within the same check until target is met,
+paced by `recycleStaggerSeconds` so portal FX don't all pop in at once). Default
+`minEngagedEnemies` raised 2 → 5 (of the fixed 11-AI-car pool - deliberately **not** raised via
+`ArcadeModeData.howManyVehicleByRace`, since that's global to every Arcade race on every track
+and only 2 car models exist to duplicate). Hardcoded 2s poll interval extracted to
+`waveCheckInterval` - the main tempo knob to play with. New `ClusterEnemiesNearPlayer()` (toggle:
+`initialClusterEnabled`) reuses `TeleportEnemyOnPath` to place the whole enemy pool in a spread
+column just ahead of the player right when Combat Run activates, instead of the base game's
+`StartLine` grid (confirmed data-driven but shared with every non-Combat-Run race on this track -
+this approach touches nothing outside `CombatRunManager`).
+
+**Scene note**: saving `02_MautikiIsland.unity` this session produced a large batch of unrelated
+`CanvasInGame` UI anchor/position changes (RectTransform values on several prefab-instance
+overrides) that didn't come from any intentional edit - reverted out of the commit via a
+targeted patch so only the `CombatRunManager` field change landed. If a future scene save
+reintroduces similar drift, it's worth a closer look then (possibly a layout-group bake tied to
+the Unity-MCP package version bump earlier this session) - not investigated further, just kept
+out of this commit.
+
+**Nothing in this session has been playtested yet** — the Ram Frenzy fix, category/Speed-Boost/
+HUD landing, and the wave-density/clustering changes all need an actual drive before trusting any
+of them.
 
 **Still to do:**
-1. Playtest: confirm the Ram Frenzy fix (multiplier reverts, pickup vanishes/cooldowns), confirm
-   Speed Boost + Ram Frenzy can be active simultaneously without either cancelling the other,
-   confirm the bottom HUD shows both countdowns and the rear icons don't flicker.
+1. Playtest everything above in one pass: Ram Frenzy fix, Speed Boost + Ram Frenzy coexisting,
+   bottom HUD, enemies clustering near player at start, engaged count climbing to ~5 quickly
+   after a kill streak instead of trickling back.
 2. Stage 2 for `CombatBuffHUD`: dynamic slots (appear on pickup, disappear on expiry) instead of
    always-visible dimmed slots.
 3. Implement `ProjectileDagger` (Raphael) and `ElectroZap` (Donatello) attack execution in
    `CarAbilityController.ApplyEffect` + a new `AbilityProjectile.cs` for the dagger.
 4. Phase E: kill-counter UI, tuning pass. All per `Documentation/CombatRun_Plan.md`.
 
-**Committed & pushed** through `0ceee6c` (category-scoped buffs + Speed Boost + bottom HUD).
-Earlier: Phase D + portal FX +
+**Committed & pushed** through `9ab5ecb` (denser waves + faster catch-up + initial clustering).
+Earlier: category-scoped buffs + Speed Boost + bottom HUD in `0ceee6c`, Phase D + portal FX +
 enemy speed multiplier in `1113c8c`, Chase Assist in `21ccc4c`, original combat run in `7a5a217`,
-minigame buttons + crash guards in `b47ac79`/`f7f5c01`. Working tree is clean as of this update —
+minigame buttons + crash guards in `b47ac79`/`f7f5c01`. Working tree is clean as of this update -
 run `git status` to confirm before assuming anything is uncommitted.
 
 ## Git history (this thread's commits)
@@ -299,7 +322,8 @@ run `git status` to confirm before assuming anything is uncommitted.
 - `5774763` Add unity-mcp-reconnect skill (Cloud-mode connection troubleshooting)
 - `be74dbb` Phase C in-Editor wiring: Ram Frenzy asset + TMNT theme + spawner attached
 - `8bd3d3f`/`e4c1bd8` Fix MissingReferenceException in CarAbilityController.Activate (playtest bug)
-- `0ceee6c` Category-scoped ability buffs + Speed Boost + bottom-of-screen power-up HUD
+- `0ceee6c`/`a54034a` Category-scoped ability buffs + Speed Boost + bottom-of-screen power-up HUD
+- `9ab5ecb` Denser waves + faster catch-up + initial clustering near player start
 - Run `git status`/`git log` to confirm nothing has drifted since this was last updated.
 
 ## Environment / working notes for whoever picks this up
