@@ -232,16 +232,20 @@ needed). Only **RamFrenzy** (×3 damage multiplier on `CombatRamDamageDealer`) i
 end-to-end; `ProjectileDagger`/`ElectroZap` exist in the `CombatAttackType` enum but log a clear
 "not implemented" warning if picked — Raphael daggers / Donatello electro still need building.
 
+**In-Editor wiring for Phase C done** (commit `be74dbb`): `Assets/TDR/Assets/Datas/CombatRun/`
+has `Ability_RamFrenzy.asset` (×3 damage multiplier, 8s duration) and `Theme_TMNT.asset`
+(references it); `CombatRunManager.theme` assigned, `CombatPickupSpawner` added to the
+`CombatRunMode` GameObject in `02_MautikiIsland`. **Not yet confirmed by an actual playtest** —
+drive the track, run over a spawned pickup, confirm ram damage triples and the rear icon shows
+for ~8s before doing anything else with Phase C.
+
 **Still to do:**
-1. **In-Editor wiring for Phase C** (blocked this session on Unity MCP reauth — do this first):
-   create one `AbilityDefinition` asset (Ram Frenzy) and one `CombatThemeDefinition` asset
-   referencing it, assign it to `CombatRunManager.theme`, add a `CombatPickupSpawner` component
-   to the `CombatRunMode` scene GameObject, then playtest that a pickup grants the buff.
+1. Playtest the Ram Frenzy pickup loop (see above) before building further on top of it.
 2. Implement `ProjectileDagger` (Raphael) and `ElectroZap` (Donatello) attack execution in
    `CarAbilityController.ApplyEffect` + a new `AbilityProjectile.cs` for the dagger.
 3. Phase E: kill-counter UI, tuning pass. All per `Documentation/CombatRun_Plan.md`.
 
-**Committed & pushed** through `123c2f4` (Phase C framework). Earlier: Phase D + portal FX +
+**Committed & pushed** through `be74dbb` (Phase C in-Editor wiring). Earlier: Phase D + portal FX +
 enemy speed multiplier in `1113c8c`, Chase Assist in `21ccc4c`, original combat run in `7a5a217`,
 minigame buttons + crash guards in `b47ac79`/`f7f5c01`. Working tree is clean as of this update —
 run `git status` to confirm before assuming anything is uncommitted.
@@ -261,6 +265,9 @@ run `git status` to confirm before assuming anything is uncommitted.
 - `21ccc4c` Combat Run: experimental Chase Assist
 - `ccfa034`/`0cc3be0`/`d008983` Strip project to car-game-only content (removed WebView
   minigames, stock Unity template boilerplate, TDR asset pack's bundled demo/tutorial content)
+- `123c2f4`/`e0fd82a` Combat Run Phase C framework (pickups + ability buffs, Ram Frenzy wired)
+- `5774763` Add unity-mcp-reconnect skill (Cloud-mode connection troubleshooting)
+- `be74dbb` Phase C in-Editor wiring: Ram Frenzy asset + TMNT theme + spawner attached
 - `123c2f4` Combat Run Phase C framework: pickups + ability buffs (Ram Frenzy wired)
 - Run `git status`/`git log` to confirm nothing has drifted since this was last updated.
 
