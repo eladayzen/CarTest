@@ -32,18 +32,32 @@ namespace TS.Generics
         public float                 impactBurstCap = 15f;
 
         [Header("Wave Respawn (keep enemies near the player)")]
+        // How often the engagement count gets checked - the main "tempo" knob.
+        public float                 waveCheckInterval = 2f;
         // Distance ahead of the player (along the path) where recycled enemies reappear.
         public float                 spawnAheadDistance = 80f;
         // Engagement window relative to the player's path position: enemies inside
         // [player - engagementBehind, player + engagementAhead] count as "engaged".
         public float                 engagementBehind = 30f;
         public float                 engagementAhead = 120f;
-        // Below this many engaged enemies, one gets recycled ahead of the player.
-        public int                   minEngagedEnemies = 2;
+        // Below this many engaged enemies, recycle enemies in - the density target. Out of the
+        // fixed pool size (11 AI cars by default), so leave headroom for dead/cooldown enemies.
+        public int                   minEngagedEnemies = 5;
         // A destroyed enemy stays gone at least this long before it can come back.
         public float                 respawnDelaySeconds = 5f;
-        // Minimum spacing between two consecutive recycles.
-        public float                 recycleCooldownSeconds = 4f;
+        // When below minEngagedEnemies, recycles repeat within the same check (a "catch-up
+        // burst") instead of one-per-check - this is what makes "almost always N nearby" actually
+        // reachable after a kill streak instead of trickling back one every few seconds. This
+        // just paces individual recycles within a burst so their portal FX don't all pop in on
+        // the same frame - it does not throttle how many happen overall.
+        public float                 recycleStaggerSeconds = 0.4f;
+
+        [Header("Initial Clustering (start Combat Run with enemies near the player instead of the base game's wide starting grid)")]
+        public bool                  initialClusterEnabled = true;
+        // Path-distance ahead of the player where the first clustered enemy lands.
+        public float                 initialClusterStartOffset = 20f;
+        // Spacing between each subsequent clustered enemy so they don't overlap.
+        public float                 initialClusterSpacing = 15f;
 
         [Header("Abilities (Phase C)")]
         // Single swap point for a different theme later (e.g. General vs TMNT); prototype just
@@ -145,6 +159,9 @@ namespace TS.Generics
                 }
             }
 
+            if (initialClusterEnabled)
+                ClusterEnemiesNearPlayer();
+
             isReady = true;
             Debug.Log("[CombatRun] Active - enemies: " + activeEnemies.Count);
 
@@ -153,84 +170,127 @@ namespace TS.Generics
             #endregion
         }
 
+        // Places the whole enemy pool just ahead of the player in a spread column instead of
+        // wherever the base game's StartLine grid math put them (StartLine is shared with every
+        // non-Combat-Run race on this track, so this reuses TeleportEnemyOnPath - the exact
+        // mechanism WaveRespawnRoutine already trusts for mid-race repositioning - rather than
+        // touching that shared system).
+        void ClusterEnemiesNearPlayer()
+        {
+            #region
+            if (playerPathFollow == null || playerPathFollow.Track == null) return;
+
+            float dist = PlayerPathDistance() + initialClusterStartOffset;
+            for (int i = 0; i < activeEnemies.Count; i++)
+            {
+                EnemyVehicleHealth enemy = activeEnemies[i];
+                if (enemy == null) continue;
+
+                TeleportEnemyOnPath(enemy, dist);
+                dist += initialClusterSpacing;
+            }
+            #endregion
+        }
+
         // ---------------------------------------------------------------------------------
-        // Wave respawn: every couple of seconds, count enemies engaged around the player;
-        // if too few, recycle one (dead first, else the one farthest outside the window) to
-        // spawnAheadDistance in front of the player - so the player is never alone for long.
+        // Wave respawn: every waveCheckInterval seconds, count enemies engaged around the
+        // player; if too few, recycle enemies in (dead first, else farthest outside the window)
+        // to spawnAheadDistance in front of the player. Below target, this recycles repeatedly
+        // within the same check - a "catch-up burst," paced by recycleStaggerSeconds rather than
+        // gated to one-per-check - so a big deficit (e.g. after several kills in a row) fills
+        // back in over a couple seconds instead of trickling back one every several seconds.
         // ---------------------------------------------------------------------------------
         IEnumerator WaveRespawnRoutine()
         {
             #region
-            float lastRecycleTime = -999f;
-
             while (true)
             {
                 float t = 0f;
-                while (t < 2f)
+                while (t < waveCheckInterval)
                 {
                     if (!PauseManager.instance.Bool_IsGamePaused) t += Time.deltaTime;
                     yield return null;
                 }
 
                 if (playerPathFollow == null || playerPathFollow.Track == null) continue;
-                if (Time.time - lastRecycleTime < recycleCooldownSeconds) continue;
 
-                float pathLength = playerPathFollow.Track.pathLength;
-                float playerDist = playerPathFollow.progressDistance;
-
-                int engaged = 0;
-                EnemyVehicleHealth bestCandidate = null;
-                float bestCandidateScore = -1f;
-
-                foreach (EnemyVehicleHealth enemy in activeEnemies)
+                while (true)
                 {
-                    if (enemy == null) continue;
+                    int engaged = EvaluateEngagement(out EnemyVehicleHealth bestCandidate);
+                    if (engaged >= minEngagedEnemies || bestCandidate == null) break;
 
-                    if (enemy.isDead || !enemy.gameObject.activeSelf)
-                    {
-                        // Dead: candidate once its respawn delay has passed. Dead beats any
-                        // alive-but-far candidate (score above the wrap-gap maximum).
-                        if (Time.time - enemy.deathTime >= respawnDelaySeconds &&
-                            bestCandidateScore < pathLength + 1f)
-                        {
-                            bestCandidate = enemy;
-                            bestCandidateScore = pathLength + 1f;
-                        }
-                        continue;
-                    }
+                    TeleportEnemyOnPath(bestCandidate, PlayerPathDistance() + spawnAheadDistance);
+                    bestCandidate.ResetCombatHealth();
+                    bestCandidate.gameObject.SetActive(true);
+                    Debug.Log("[CombatRun] Wave respawn: " + bestCandidate.name
+                        + " recycled ahead of player (engaged was " + engaged + ")");
 
-                    // Wrapped gap in [0, pathLength): 0..engagementAhead = ahead in window,
-                    // pathLength-engagementBehind..pathLength = behind in window. Works
-                    // whether progressDistance wraps at pathLength or accumulates.
-                    VehiclePathFollow vpf = enemy.GetComponent<VehiclePathFollow>();
-                    float gap = ((vpf.progressDistance - playerDist) % pathLength + pathLength) % pathLength;
-                    bool inWindow = gap <= engagementAhead || gap >= pathLength - engagementBehind;
-
-                    if (inWindow)
+                    float staggerT = 0f;
+                    while (staggerT < recycleStaggerSeconds)
                     {
-                        engaged++;
-                    }
-                    else
-                    {
-                        // Alive but out of range: score by how far behind the player it is.
-                        float behindDistance = pathLength - gap;
-                        if (behindDistance > bestCandidateScore)
-                        {
-                            bestCandidate = enemy;
-                            bestCandidateScore = behindDistance;
-                        }
+                        if (!PauseManager.instance.Bool_IsGamePaused) staggerT += Time.deltaTime;
+                        yield return null;
                     }
                 }
-
-                if (engaged >= minEngagedEnemies || bestCandidate == null) continue;
-
-                lastRecycleTime = Time.time;
-                TeleportEnemyOnPath(bestCandidate, PlayerPathDistance() + spawnAheadDistance);
-                bestCandidate.ResetCombatHealth();
-                bestCandidate.gameObject.SetActive(true);
-                Debug.Log("[CombatRun] Wave respawn: " + bestCandidate.name
-                    + " recycled ahead of player (engaged was " + engaged + ")");
             }
+            #endregion
+        }
+
+        // Counts enemies inside the engagement window around the player and finds the single
+        // best recycle candidate (dead-and-past-respawn-delay beats any alive-but-far car).
+        // Pulled out of WaveRespawnRoutine so the catch-up burst above can call it repeatedly
+        // without duplicating the wrap-aware gap math.
+        int EvaluateEngagement(out EnemyVehicleHealth bestCandidate)
+        {
+            #region
+            float pathLength = playerPathFollow.Track.pathLength;
+            float playerDist = playerPathFollow.progressDistance;
+
+            int engaged = 0;
+            bestCandidate = null;
+            float bestCandidateScore = -1f;
+
+            foreach (EnemyVehicleHealth enemy in activeEnemies)
+            {
+                if (enemy == null) continue;
+
+                if (enemy.isDead || !enemy.gameObject.activeSelf)
+                {
+                    // Dead: candidate once its respawn delay has passed. Dead beats any
+                    // alive-but-far candidate (score above the wrap-gap maximum).
+                    if (Time.time - enemy.deathTime >= respawnDelaySeconds &&
+                        bestCandidateScore < pathLength + 1f)
+                    {
+                        bestCandidate = enemy;
+                        bestCandidateScore = pathLength + 1f;
+                    }
+                    continue;
+                }
+
+                // Wrapped gap in [0, pathLength): 0..engagementAhead = ahead in window,
+                // pathLength-engagementBehind..pathLength = behind in window. Works whether
+                // progressDistance wraps at pathLength or accumulates.
+                VehiclePathFollow vpf = enemy.GetComponent<VehiclePathFollow>();
+                float gap = ((vpf.progressDistance - playerDist) % pathLength + pathLength) % pathLength;
+                bool inWindow = gap <= engagementAhead || gap >= pathLength - engagementBehind;
+
+                if (inWindow)
+                {
+                    engaged++;
+                }
+                else
+                {
+                    // Alive but out of range: score by how far behind the player it is.
+                    float behindDistance = pathLength - gap;
+                    if (behindDistance > bestCandidateScore)
+                    {
+                        bestCandidate = enemy;
+                        bestCandidateScore = behindDistance;
+                    }
+                }
+            }
+
+            return engaged;
             #endregion
         }
 
