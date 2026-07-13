@@ -136,7 +136,12 @@ namespace TS.Generics
                     playerRamDealer = vehicles[i].gameObject.AddComponent<CombatRamDamageDealer>();
                     playerRamDealer.InitCombat(this);
 
-                    vehicles[i].gameObject.AddComponent<CarAbilityController>().InitCombat(this);
+                    CarAbilityController abilityController =
+                        vehicles[i].gameObject.AddComponent<CarAbilityController>();
+                    abilityController.InitCombat(this);
+
+                    vehicles[i].gameObject.AddComponent<CombatBuffHUD>()
+                        .InitCombat(this, abilityController);
                 }
             }
 

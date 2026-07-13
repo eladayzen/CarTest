@@ -15,3 +15,4 @@ MonoBehaviour:
   themeName: TMNT
   abilities:
   - {fileID: 11400000, guid: ed1335d9b71794e2ca25933fdd041c15, type: 2}
+  - {fileID: 11400000, guid: e4cb45b1be88d427c95226db328a5196, type: 2}
