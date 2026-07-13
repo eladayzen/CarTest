@@ -243,23 +243,39 @@ the following `StartCoroutine(RespawnRoutine())` from ever running, so pickups n
 on cooldown. Fixed: gameplay state now applies unconditionally before any icon UI touch,
 `iconRoot` lazily rebuilds if stale, and `CombatPickup` hides/cooldowns before calling
 `Activate()` so pickup-vanish feedback can't be blocked by ability logic. Added
-activation/expiry/collection logs. **Not yet re-confirmed by a follow-up playtest** — verify the
-fix actually resolves both symptoms before trusting Ram Frenzy is done.
+activation/expiry/collection logs.
 
-**In-Editor wiring for Phase C done** (commit `be74dbb`): `Assets/TDR/Assets/Datas/CombatRun/`
-has `Ability_RamFrenzy.asset` (×3 damage multiplier, 8s duration) and `Theme_TMNT.asset`
-(references it); `CombatRunManager.theme` assigned, `CombatPickupSpawner` added to the
-`CombatRunMode` GameObject in `02_MautikiIsland`. **Not yet confirmed by an actual playtest** —
-drive the track, run over a spawned pickup, confirm ram damage triples and the rear icon shows
-for ~8s before doing anything else with Phase C.
+**Category-scoped buffs + Speed Boost + bottom HUD landed** (commit `0ceee6c`): the single
+shared `activeDefinition`/`activeRoutine` on `CarAbilityController` — where any new pickup
+cancelled whatever was running, no matter what — is now a `Dictionary<AbilityCategory,
+ActiveBuff>`. `AbilityDefinition.category` (`Attack` or `Speed`) is the cancel-key: same
+category replaces, different categories run fully independently. The rear world-space icon is
+now one slot per category (was a single shared icon, which would've flickered with two buffs
+active at once — a real bug the old single-slot version would have hit). `CombatEffectType`
+(renamed from `CombatAttackType`) gained `SpeedBoost`: a single-shot apply/restore of the
+player's cached baseline `CarController.maxSpeed`/`refMaxSpeed` (confirmed via
+`CarPathFollowPlayerInput` that nothing re-touches the player's max speed every frame the way
+`CarAI.TakeCareOfObstacles` fights AI cars, so — unlike Chase Assist — no repeating coroutine is
+needed). New `CombatBuffHUD.cs`: first code-built Screen Space Overlay UI in the project
+(everything else is World Space), bottom-center, 2 fixed slots (Attack/Speed) dimmed when idle —
+**Stage 2, not built**: animate slots appearing/disappearing instead of always showing dimmed.
+New `Ability_SpeedBoost.asset`, added to `Theme_TMNT.asset`.
+
+**Nothing in this session has been playtested yet** — the Ram Frenzy fix, and everything in the
+category/Speed-Boost/HUD landing, both need an actual drive before trusting either works.
 
 **Still to do:**
-1. Playtest the Ram Frenzy pickup loop (see above) before building further on top of it.
-2. Implement `ProjectileDagger` (Raphael) and `ElectroZap` (Donatello) attack execution in
+1. Playtest: confirm the Ram Frenzy fix (multiplier reverts, pickup vanishes/cooldowns), confirm
+   Speed Boost + Ram Frenzy can be active simultaneously without either cancelling the other,
+   confirm the bottom HUD shows both countdowns and the rear icons don't flicker.
+2. Stage 2 for `CombatBuffHUD`: dynamic slots (appear on pickup, disappear on expiry) instead of
+   always-visible dimmed slots.
+3. Implement `ProjectileDagger` (Raphael) and `ElectroZap` (Donatello) attack execution in
    `CarAbilityController.ApplyEffect` + a new `AbilityProjectile.cs` for the dagger.
-3. Phase E: kill-counter UI, tuning pass. All per `Documentation/CombatRun_Plan.md`.
+4. Phase E: kill-counter UI, tuning pass. All per `Documentation/CombatRun_Plan.md`.
 
-**Committed & pushed** through `be74dbb` (Phase C in-Editor wiring). Earlier: Phase D + portal FX +
+**Committed & pushed** through `0ceee6c` (category-scoped buffs + Speed Boost + bottom HUD).
+Earlier: Phase D + portal FX +
 enemy speed multiplier in `1113c8c`, Chase Assist in `21ccc4c`, original combat run in `7a5a217`,
 minigame buttons + crash guards in `b47ac79`/`f7f5c01`. Working tree is clean as of this update —
 run `git status` to confirm before assuming anything is uncommitted.
@@ -282,7 +298,8 @@ run `git status` to confirm before assuming anything is uncommitted.
 - `123c2f4`/`e0fd82a` Combat Run Phase C framework (pickups + ability buffs, Ram Frenzy wired)
 - `5774763` Add unity-mcp-reconnect skill (Cloud-mode connection troubleshooting)
 - `be74dbb` Phase C in-Editor wiring: Ram Frenzy asset + TMNT theme + spawner attached
-- `123c2f4` Combat Run Phase C framework: pickups + ability buffs (Ram Frenzy wired)
+- `8bd3d3f`/`e4c1bd8` Fix MissingReferenceException in CarAbilityController.Activate (playtest bug)
+- `0ceee6c` Category-scoped ability buffs + Speed Boost + bottom-of-screen power-up HUD
 - Run `git status`/`git log` to confirm nothing has drifted since this was last updated.
 
 ## Environment / working notes for whoever picks this up
