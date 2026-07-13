@@ -91,13 +91,21 @@ namespace TS.Generics
                 RevertEffect(activeDefinition);
             }
 
+            // Gameplay state first, UI second, and in its own guarded step: if the icon canvas
+            // ever goes stale (iconRoot == null covers both "never built" and "destroyed" - Unity
+            // overloads == for exactly this) an icon failure must never strand the buff applied
+            // above with no revert scheduled, which is what silently happened before this fix.
             activeDefinition = definition;
             ApplyEffect(definition);
+            activeRoutine = StartCoroutine(BuffRoutine(definition));
 
+            if (iconRoot == null)
+                BuildIcon();
             iconImage.sprite = definition.icon;
             iconRoot.gameObject.SetActive(true);
 
-            activeRoutine = StartCoroutine(BuffRoutine(definition));
+            Debug.Log("[CombatRun] Ability activated: " + definition.abilityName +
+                " (" + definition.attackType + ", " + definition.duration + "s)");
             #endregion
         }
 
@@ -112,9 +120,10 @@ namespace TS.Generics
             }
 
             RevertEffect(definition);
-            iconRoot.gameObject.SetActive(false);
+            if (iconRoot != null) iconRoot.gameObject.SetActive(false);
             activeDefinition = null;
             activeRoutine = null;
+            Debug.Log("[CombatRun] Ability expired: " + definition.abilityName);
             #endregion
         }
 

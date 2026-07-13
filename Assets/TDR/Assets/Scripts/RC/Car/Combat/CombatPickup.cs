@@ -44,8 +44,12 @@ namespace TS.Generics
                 other.transform.parent.parent.parent.GetComponent<CarAbilityController>();
             if (ability == null) return;   // AI car - structurally can't collect
 
-            ability.Activate(definition);
+            // Hide/cooldown first: this pickup vanishing is the player-visible confirmation of
+            // collection and must happen even if ability activation itself has trouble, rather
+            // than depending on Activate() succeeding first.
+            Debug.Log("[CombatRun] Pickup collected: " + definition.abilityName);
             StartCoroutine(RespawnRoutine());
+            ability.Activate(definition);
             #endregion
         }
 
