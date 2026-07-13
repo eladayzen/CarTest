@@ -232,6 +232,20 @@ needed). Only **RamFrenzy** (×3 damage multiplier on `CombatRamDamageDealer`) i
 end-to-end; `ProjectileDagger`/`ElectroZap` exist in the `CombatAttackType` enum but log a clear
 "not implemented" warning if picked — Raphael daggers / Donatello electro still need building.
 
+**Playtested and one real bug found + fixed** (commit `8bd3d3f`): user reported enemies dying
+almost instantly and no visible feedback on pickup collection. Root cause from the console log:
+`CarAbilityController.Activate()` touched `iconRoot.gameObject` *before* starting the
+gameplay-critical `BuffRoutine` coroutine; when `iconRoot` was stale the resulting
+`MissingReferenceException` aborted the method early, which (a) left the RamFrenzy ×3 damage
+multiplier permanently stuck on since its revert-coroutine never got scheduled, and (b) — since
+the exception happened inside `CombatPickup.OnTriggerEnter`'s call to `Activate()` — prevented
+the following `StartCoroutine(RespawnRoutine())` from ever running, so pickups never hid or went
+on cooldown. Fixed: gameplay state now applies unconditionally before any icon UI touch,
+`iconRoot` lazily rebuilds if stale, and `CombatPickup` hides/cooldowns before calling
+`Activate()` so pickup-vanish feedback can't be blocked by ability logic. Added
+activation/expiry/collection logs. **Not yet re-confirmed by a follow-up playtest** — verify the
+fix actually resolves both symptoms before trusting Ram Frenzy is done.
+
 **In-Editor wiring for Phase C done** (commit `be74dbb`): `Assets/TDR/Assets/Datas/CombatRun/`
 has `Ability_RamFrenzy.asset` (×3 damage multiplier, 8s duration) and `Theme_TMNT.asset`
 (references it); `CombatRunManager.theme` assigned, `CombatPickupSpawner` added to the
