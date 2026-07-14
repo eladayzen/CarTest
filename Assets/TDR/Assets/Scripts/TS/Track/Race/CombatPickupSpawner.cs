@@ -7,6 +7,7 @@
 // CombatRunManager/PathLaneGlowRenderer.
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TS.Generics
 {
@@ -94,8 +95,43 @@ namespace TS.Generics
             mat.EnableKeyword("_EMISSION");
             visual.GetComponent<MeshRenderer>().material = mat;
 
+            if (definition.icon != null)
+                BuildIconBillboard(root.transform, definition.icon);
+
             CombatPickup pickup = root.AddComponent<CombatPickup>();
             pickup.definition = definition;
+            #endregion
+        }
+
+        void BuildIconBillboard(Transform center, Sprite icon)
+        {
+            #region
+            const float canvasSize = 100f;
+
+            GameObject canvasObj = new GameObject("Icon_Canvas");
+            canvasObj.transform.SetParent(center, false);
+
+            Canvas canvas = canvasObj.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.WorldSpace;
+            canvas.sortingOrder = 50;
+            RectTransform canvasRect = canvasObj.GetComponent<RectTransform>();
+            canvasRect.sizeDelta = new Vector2(canvasSize, canvasSize);
+            canvasObj.transform.localScale = Vector3.one * (visualScale * 0.9f / canvasSize);
+
+            GameObject iconObj = new GameObject("Icon");
+            iconObj.transform.SetParent(canvasObj.transform, false);
+            RectTransform iconRect = iconObj.AddComponent<RectTransform>();
+            iconRect.anchorMin = Vector2.zero;
+            iconRect.anchorMax = Vector2.one;
+            iconRect.offsetMin = Vector2.zero;
+            iconRect.offsetMax = Vector2.zero;
+            Image iconImage = iconObj.AddComponent<Image>();
+            iconImage.sprite = icon;
+            iconImage.preserveAspect = true;
+
+            CombatPickupIconBillboard billboard = canvasObj.AddComponent<CombatPickupIconBillboard>();
+            billboard.center = center;
+            billboard.offsetRadius = visualScale * 0.55f;
             #endregion
         }
     }

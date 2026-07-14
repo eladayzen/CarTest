@@ -1,6 +1,6 @@
 // Description: CombatBuffHUD. Attached at runtime by CombatRunManager to the player's vehicle
 // alongside CarAbilityController (reads its TryGetActiveBuff query, doesn't own any state
-// itself). Bottom-center Screen Space Overlay HUD showing one fixed slot per AbilityCategory -
+// itself). Bottom-left Screen Space Overlay HUD showing one fixed slot per AbilityCategory -
 // icon + a countdown fill bar underneath (EnemyHealthBar.Build's left-pivoted scale-X fill
 // technique, reused here in screen space instead of world space). Slots are always present,
 // dimmed when that category has no active buff. First code-built Screen Space UI in the project
@@ -19,6 +19,7 @@ namespace TS.Generics
 {
     public class CombatBuffHUD : MonoBehaviour
     {
+        public float                 leftMargin = 20f;
         public float                 bottomMargin = 20f;
         public float                 slotSize = 70f;
         public float                 slotSpacing = 16f;
@@ -68,14 +69,14 @@ namespace TS.Generics
             GameObject container = new GameObject("Container");
             RectTransform containerRect = container.AddComponent<RectTransform>();
             containerRect.SetParent(canvasObj.transform, false);
-            containerRect.anchorMin = new Vector2(0.5f, 0f);
-            containerRect.anchorMax = new Vector2(0.5f, 0f);
-            containerRect.pivot = new Vector2(0.5f, 0f);
-            containerRect.anchoredPosition = new Vector2(0f, bottomMargin);
+            containerRect.anchorMin = new Vector2(0f, 0f);
+            containerRect.anchorMax = new Vector2(0f, 0f);
+            containerRect.pivot = new Vector2(0f, 0f);
+            containerRect.anchoredPosition = new Vector2(leftMargin, bottomMargin);
 
             HorizontalLayoutGroup layout = container.AddComponent<HorizontalLayoutGroup>();
             layout.spacing = slotSpacing;
-            layout.childAlignment = TextAnchor.LowerCenter;
+            layout.childAlignment = TextAnchor.LowerLeft;
             layout.childControlWidth = false;
             layout.childControlHeight = false;
             layout.childForceExpandWidth = false;
