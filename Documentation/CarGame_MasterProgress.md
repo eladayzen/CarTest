@@ -261,50 +261,6 @@ needed). New `CombatBuffHUD.cs`: first code-built Screen Space Overlay UI in the
 **Stage 2, not built**: animate slots appearing/disappearing instead of always showing dimmed.
 New `Ability_SpeedBoost.asset`, added to `Theme_TMNT.asset`.
 
----
-
-## ⚠️ GLOBAL CHANGE (not Combat-Run-scoped): starting grid spacing widened — REVERT INSTRUCTIONS
-
-**What changed, exactly:** `ForwardDistanceFromOtherOneVehicle` on the `StartLine` component
-(GameObject `Grp_StartLine`, path `--> GAMEPLAY <--/-> PATH/Grp_StartLine` in
-`Assets/TDR/Assets/Scenes/Tracks/Demo/02_MautikiIsland.unity`) was changed **20 → 200**
-(2026-07-13, uncommitted as of writing — check `git log` for the actual landing commit).
-
-**Why:** Combat Run cannot act until *after* the countdown finishes (its `InitRoutine` is gated
-on the post-countdown human/AI assignment — see `CombatRunManager.cs:95-117`), so there was an
-unavoidable ~4-5s window every race where the player watched the full normal starting grid,
-enemies included, before Combat Run's own "cluster near player" teleport ever fired — the
-"cars teleport the moment the game starts" the user flagged as jarring. Row spacing directly
-controls how far each row of the grid sits from the one before it; the player's own grid slot
-(row 0) is unaffected by this field — only the spacing *between* rows changes, so widening it
-pushes the AI-car rows far down the track without moving the player. At 200 units/row × ~6 rows
-(12 cars, 2/row), the AI rows land up to ~1000m down the 2695m looped track — comfortably out of
-view for the whole countdown. Combat Run's existing initial-clustering (`ClusterEnemiesNearPlayer`,
-landed the same day) + portal FX then becomes the player's first-ever sight of them, which was
-the actual goal.
-
-**⚠️ This is NOT scoped to Combat Run.** `Grp_StartLine`/`StartLine` is the shared starting-grid
-system used by **every race on this track, in every game mode** (Arcade, Time Trial,
-Championship — see `StartLine.ReturnHowManyVehicleDependingCurrentGameMode()`), not something
-Combat Run owns. Any *non*-Combat-Run race on `02_MautikiIsland` now also starts with rows ~200
-units apart instead of 20 — likely looks broken/spread-out for normal racing.
-
-**To revert — put the grid back to normal:**
-- **Via Unity MCP** (`script-execute`, same pattern used to make the change):
-  ```csharp
-  var go = GameObject.Find("Grp_StartLine");
-  var startLine = go.GetComponent<TS.Generics.StartLine>();
-  startLine.ForwardDistanceFromOtherOneVehicle = 20f;   // original value
-  UnityEditor.EditorUtility.SetDirty(startLine);
-  UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(go.scene);
-  // then save the scene (scene-save, or Cmd+S in the Editor)
-  ```
-- **Manually in the Editor:** open `02_MautikiIsland.unity`, select
-  `--> GAMEPLAY <--/-> PATH/Grp_StartLine` in the Hierarchy, find the `StartLine` component in
-  the Inspector, set **Forward Distance From Other One Vehicle** back to `20`, save the scene.
-
----
-
 **Denser waves + faster catch-up + initial clustering landed** (commit `9ab5ecb`): the old
 one-recycle-per-check + global `recycleCooldownSeconds` throttle in `WaveRespawnRoutine` made
 catching up to a higher `minEngagedEnemies` target take tens of seconds after a kill streak -
