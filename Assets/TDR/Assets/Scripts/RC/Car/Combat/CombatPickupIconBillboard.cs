@@ -24,7 +24,7 @@ namespace TS.Generics
             toCam.Normalize();
 
             transform.position = center.position + toCam * offsetRadius;
-            transform.rotation = Quaternion.LookRotation(transform.position - cam.transform.position);
+            transform.rotation = Quaternion.LookRotation(toCam);
             #endregion
         }
     }
