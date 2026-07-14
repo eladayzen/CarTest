@@ -1,10 +1,10 @@
 // Description: CombatPickupSpawner. Scatters CombatPickup instances along the track path -
 // same PathRef.instance.Track wait + tangent/lateral-offset sampling as PathLaneGlowRenderer -
-// cycling through CombatRunManager's assigned theme's abilities. Mesh, HDR emissive tinted
-// material, and trigger collider are all built procedurally at runtime (no prefab/material
-// assets to author), matching the rest of Combat Run's FX (CombatExplosionFx, CombatPortalFx,
-// EnemyHealthBar). Scene GameObject + Inspector flag, same prototype-wiring convention as
-// CombatRunManager/PathLaneGlowRenderer.
+// cycling through CombatRunManager's assigned theme's abilities. Each spawn instantiates
+// pickupPrefab (Assets/TDR/Assets/Prefabs/CombatRun/CombatPickup.prefab - mesh/collider/icon
+// billboard authored there, hand-editable) and only overrides the per-ability bits at runtime:
+// tinted HDR material and icon sprite. Scene GameObject + Inspector flag, same prototype-wiring
+// convention as CombatRunManager/PathLaneGlowRenderer.
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,8 +22,9 @@ namespace TS.Generics
         public LayerMask             groundLayerMask = ~0;
 
         [Header("Pickup Visual")]
-        public float                 visualScale = 1.2f;
-        public float                 triggerRadius = 1.5f;
+        // Assets/TDR/Assets/Prefabs/CombatRun/CombatPickup.prefab - edit mesh/collider/icon
+        // layout directly there; only tint + icon sprite are set per-ability at spawn time.
+        public GameObject            pickupPrefab;
         public float                 hdrIntensity = 3f;
 
         IEnumerator Start()
@@ -72,66 +73,42 @@ namespace TS.Generics
         {
             #region
             if (definition == null) return;
+            if (pickupPrefab == null)
+            {
+                Debug.LogError("[CombatRun] CombatPickupSpawner.pickupPrefab is not assigned - " +
+                    "nothing to spawn. Assets/TDR/Assets/Prefabs/CombatRun/CombatPickup.prefab.");
+                return;
+            }
 
-            // Root carries the trigger at a fixed world-space radius; the visual mesh is a
-            // separate scaled child so pickup-generosity and visible size can differ.
-            GameObject root = new GameObject("CombatPickup_" + definition.abilityName);
-            root.transform.SetParent(transform, true);
-            root.transform.position = position;
+            GameObject root = Instantiate(pickupPrefab, position, Quaternion.identity, transform);
+            root.name = "CombatPickup_" + definition.abilityName;
 
-            SphereCollider trig = root.AddComponent<SphereCollider>();
-            trig.isTrigger = true;
-            trig.radius = triggerRadius;
+            Transform visual = root.transform.Find("Visual");
+            if (visual != null)
+            {
+                Material mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+                mat.SetColor("_BaseColor", definition.tintColor);
+                mat.SetColor("_EmissionColor", definition.tintColor * hdrIntensity);
+                mat.EnableKeyword("_EMISSION");
+                visual.GetComponent<MeshRenderer>().material = mat;
+            }
 
-            GameObject visual = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            visual.name = "Visual";
-            visual.transform.SetParent(root.transform, false);
-            visual.transform.localScale = Vector3.one * visualScale;
-            Destroy(visual.GetComponent<Collider>());
+            Transform iconCanvas = root.transform.Find("Icon_Canvas");
+            if (iconCanvas != null)
+            {
+                if (definition.icon != null)
+                {
+                    Image iconImage = iconCanvas.GetComponentInChildren<Image>();
+                    if (iconImage != null) iconImage.sprite = definition.icon;
+                }
+                else
+                {
+                    iconCanvas.gameObject.SetActive(false);
+                }
+            }
 
-            Material mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-            mat.SetColor("_BaseColor", definition.tintColor);
-            mat.SetColor("_EmissionColor", definition.tintColor * hdrIntensity);
-            mat.EnableKeyword("_EMISSION");
-            visual.GetComponent<MeshRenderer>().material = mat;
-
-            if (definition.icon != null)
-                BuildIconBillboard(root.transform, definition.icon);
-
-            CombatPickup pickup = root.AddComponent<CombatPickup>();
-            pickup.definition = definition;
-            #endregion
-        }
-
-        void BuildIconBillboard(Transform center, Sprite icon)
-        {
-            #region
-            const float canvasSize = 100f;
-
-            GameObject canvasObj = new GameObject("Icon_Canvas");
-            canvasObj.transform.SetParent(center, false);
-
-            Canvas canvas = canvasObj.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.WorldSpace;
-            canvas.sortingOrder = 50;
-            RectTransform canvasRect = canvasObj.GetComponent<RectTransform>();
-            canvasRect.sizeDelta = new Vector2(canvasSize, canvasSize);
-            canvasObj.transform.localScale = Vector3.one * (visualScale * 0.9f / canvasSize);
-
-            GameObject iconObj = new GameObject("Icon");
-            iconObj.transform.SetParent(canvasObj.transform, false);
-            RectTransform iconRect = iconObj.AddComponent<RectTransform>();
-            iconRect.anchorMin = Vector2.zero;
-            iconRect.anchorMax = Vector2.one;
-            iconRect.offsetMin = Vector2.zero;
-            iconRect.offsetMax = Vector2.zero;
-            Image iconImage = iconObj.AddComponent<Image>();
-            iconImage.sprite = icon;
-            iconImage.preserveAspect = true;
-
-            CombatPickupIconBillboard billboard = canvasObj.AddComponent<CombatPickupIconBillboard>();
-            billboard.center = center;
-            billboard.offsetRadius = visualScale * 0.55f;
+            CombatPickup pickup = root.GetComponent<CombatPickup>();
+            if (pickup != null) pickup.definition = definition;
             #endregion
         }
     }

@@ -80,6 +80,13 @@ namespace TS.Generics
         void EnsureIconSlots()
         {
             #region
+            // Editor-only safety net: a script recompile mid-Play wipes non-serialized fields
+            // like these Dictionaries (domain reload doesn't survive them) while plain component
+            // references (ramDealer, carController) survive fine - can't happen in a build, only
+            // while iterating scripts during a live playtest in the Editor.
+            if (iconRoots == null) iconRoots = new Dictionary<AbilityCategory, Transform>();
+            if (iconImages == null) iconImages = new Dictionary<AbilityCategory, Image>();
+
             for (int i = 0; i < knownCategories.Length; i++)
             {
                 AbilityCategory category = knownCategories[i];
@@ -158,8 +165,12 @@ namespace TS.Generics
             buff.routine = StartCoroutine(BuffRoutine(category, buff));
 
             EnsureIconSlots();
-            iconImages[category].sprite = definition.icon;
-            iconRoots[category].gameObject.SetActive(true);
+            if (iconRoots.TryGetValue(category, out Transform iconRoot) && iconRoot != null &&
+                iconImages.TryGetValue(category, out Image iconImage) && iconImage != null)
+            {
+                iconImage.sprite = definition.icon;
+                iconRoot.gameObject.SetActive(true);
+            }
 
             Debug.Log("[CombatRun] Ability activated: " + definition.abilityName +
                 " (" + definition.effectType + ", category=" + category + ", " +

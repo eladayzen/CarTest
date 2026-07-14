@@ -63,6 +63,11 @@ namespace TS.Generics
         // Single swap point for a different theme later (e.g. General vs TMNT); prototype just
         // assigns the TMNT asset here. CombatPickupSpawner reads this to know what to scatter.
         public CombatThemeDefinition  theme;
+        // CombatBuffHUD's per-category idle icon (greyed out, shown before that category's
+        // first pickup) - set here since the HUD itself is built at runtime with AddComponent,
+        // never through a prefab Inspector.
+        public Sprite                 defaultAttackIcon;
+        public Sprite                 defaultSpeedIcon;
 
         [Header("Chase Assist (experimental - rubber-band the single nearest car ahead)")]
         public bool                  enableChaseAssist = false;
@@ -154,8 +159,10 @@ namespace TS.Generics
                         vehicles[i].gameObject.AddComponent<CarAbilityController>();
                     abilityController.InitCombat(this);
 
-                    vehicles[i].gameObject.AddComponent<CombatBuffHUD>()
-                        .InitCombat(this, abilityController);
+                    CombatBuffHUD hud = vehicles[i].gameObject.AddComponent<CombatBuffHUD>();
+                    hud.defaultAttackIcon = defaultAttackIcon;
+                    hud.defaultSpeedIcon = defaultSpeedIcon;
+                    hud.InitCombat(this, abilityController);
                 }
             }
 

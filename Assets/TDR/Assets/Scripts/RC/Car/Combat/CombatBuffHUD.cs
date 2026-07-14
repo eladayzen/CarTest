@@ -25,6 +25,10 @@ namespace TS.Generics
         public float                 slotSpacing = 16f;
         public float                 idleAlpha = 0.35f;
 
+        [Header("Default Icons (shown greyed-out before first pickup)")]
+        public Sprite                 defaultAttackIcon;
+        public Sprite                 defaultSpeedIcon;
+
         CarAbilityController         abilityController;
 
         class Slot
@@ -33,6 +37,7 @@ namespace TS.Generics
             public Image             icon;
             public RectTransform     fillRect;
             public Image             fillImage;
+            public Sprite            defaultIcon;
         }
 
         Dictionary<AbilityCategory, Slot> slots = new Dictionary<AbilityCategory, Slot>();
@@ -139,6 +144,7 @@ namespace TS.Generics
                 icon = iconImage,
                 fillRect = fillRect,
                 fillImage = fillImage,
+                defaultIcon = category == AbilityCategory.Speed ? defaultSpeedIcon : defaultAttackIcon,
             };
 
             SetSlotIdle(slots[category]);
@@ -173,6 +179,7 @@ namespace TS.Generics
         void SetSlotIdle(Slot slot)
         {
             #region
+            slot.icon.sprite = slot.defaultIcon;
             slot.icon.color = new Color(1f, 1f, 1f, idleAlpha);
             slot.fillRect.localScale = new Vector3(0f, 1f, 1f);
             #endregion
