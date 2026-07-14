@@ -291,11 +291,20 @@ of them.
 1. Playtest everything above in one pass: Ram Frenzy fix, Speed Boost + Ram Frenzy coexisting,
    bottom HUD, enemies clustering near player at start, engaged count climbing to ~5 quickly
    after a kill streak instead of trickling back.
-2. Stage 2 for `CombatBuffHUD`: dynamic slots (appear on pickup, disappear on expiry) instead of
+2. **Unsolved: enemy cars are visible on the normal starting grid during the countdown**, before
+   Combat Run ever gets a chance to act (it's gated on the post-countdown human/AI assignment,
+   so it structurally can't run any earlier). A fix via widening the shared `StartLine` grid
+   spacing (`Grp_StartLine` in `02_MautikiIsland.unity`) was tried 2026-07-13 and reverted the
+   same day at the user's request (exact reason not captured) — check `git log`/`git status`
+   before assuming either state is current. Untried alternatives: an earlier Combat-Run hook to
+   hide AI cars before the countdown UI shows them; or leaving the countdown grid alone and just
+   staggering the post-countdown cluster-teleport (like the wave-catch-up burst already does)
+   instead of all 11 cars popping on the same frame.
+3. Stage 2 for `CombatBuffHUD`: dynamic slots (appear on pickup, disappear on expiry) instead of
    always-visible dimmed slots.
-3. Implement `ProjectileDagger` (Raphael) and `ElectroZap` (Donatello) attack execution in
+4. Implement `ProjectileDagger` (Raphael) and `ElectroZap` (Donatello) attack execution in
    `CarAbilityController.ApplyEffect` + a new `AbilityProjectile.cs` for the dagger.
-4. Phase E: kill-counter UI, tuning pass. All per `Documentation/CombatRun_Plan.md`.
+5. Phase E: kill-counter UI, tuning pass. All per `Documentation/CombatRun_Plan.md`.
 
 **Committed & pushed** through `9ab5ecb` (denser waves + faster catch-up + initial clustering).
 Earlier: category-scoped buffs + Speed Boost + bottom HUD in `0ceee6c`, Phase D + portal FX +
