@@ -87,8 +87,8 @@ namespace TS.Generics
             if (visual != null)
             {
                 Material mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-                mat.SetColor("_BaseColor", definition.tintColor);
-                mat.SetColor("_EmissionColor", definition.tintColor * hdrIntensity);
+                mat.SetColor("_BaseColor", definition.pickupGlowColor);
+                mat.SetColor("_EmissionColor", definition.pickupGlowColor * hdrIntensity);
                 mat.EnableKeyword("_EMISSION");
                 visual.GetComponent<MeshRenderer>().material = mat;
             }

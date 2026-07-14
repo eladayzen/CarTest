@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityName: Ram Frenzy
   icon: {fileID: 21300000, guid: 53e4e495f55734fb98e6dc1adb797221, type: 3}
-  tintColor: {r: 1, g: 0.35, b: 0.05, a: 1}
+  barColor: {r: 1, g: 0.35, b: 0.05, a: 1}
+  pickupGlowColor: {r: 1, g: 0.35, b: 0.05, a: 1}
   duration: 8
   category: 0
   effectType: 0

@@ -97,7 +97,7 @@ namespace TS.Generics
                 {
                     slot.icon.sprite = definition.icon;
                     slot.icon.color = Color.white;
-                    slot.ringFill.color = definition.tintColor;
+                    slot.ringFill.color = definition.barColor;
                     slot.ringFill.fillAmount = remaining01;
                 }
                 else

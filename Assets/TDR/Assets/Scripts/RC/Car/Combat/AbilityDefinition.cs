@@ -23,8 +23,10 @@ namespace TS.Generics
         [Header("Display")]
         public string                 abilityName = "New Ability";
         public Sprite                 icon;
-        // Also used as the pickup's HDR emissive tint (CombatPickupSpawner).
-        public Color                  tintColor = Color.white;
+        // CombatBuffHUD's ring fill color for this ability's category.
+        public Color                  barColor = Color.white;
+        // CombatPickupSpawner's base + HDR emissive tint on the in-world pickup sphere.
+        public Color                  pickupGlowColor = Color.white;
 
         [Header("Buff")]
         public float                  duration = 8f;
